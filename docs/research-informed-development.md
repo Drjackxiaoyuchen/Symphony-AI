@@ -1,6 +1,6 @@
 # Symphony AI: research-informed development
 
-Library updated: **2026-11-21**. Individual source review dates are retained below.
+Library updated: **2026-11-22**. Individual source review dates are retained below.
 
 This pass reviews all 18 original sections. It adopts interface and data-quality patterns while keeping unimplemented integrations and clinical interpretation explicitly separate from imported observations. The catalog behind the app and this document is `src/data/research.ts`; regenerate this document with `npm run docs:research`.
 
@@ -21,6 +21,8 @@ This pass reviews all 18 original sections. It adopts interface and data-quality
 - 2026-11-20: Medical Records is a working local source register with reviewed single-report FHIR projection, patient/reference consistency gates, exact quantities/absence, provenance, backups and exports. See [method and subset limits](methods/medical-records-v1.md).
 
 - 2026-11-21: Genome Tracker now has a personal condition-specific germline SNV evidence register, version-aware field comparisons, source/saved discrepancy flags, bounded histories and reproducible CSV/JSON/report outputs. See [method, sources and validation scope](methods/genome-evidence-v1.md). Source transcriptions are not independently verified ClinVar records or personal risk results.
+
+- 2026-11-22: Medicine Checker replaces illustrative prescribing/interaction advice with a local source plan, explicit daily/PRN/unresolved schedules, date eligibility, dimensional ingredient arithmetic, source-level contributions, repeated-label inspection and portable reports. See [method and validation scope](methods/medication-plan-v1.md). No clinical interaction or PGx capability is claimed.
 
 ## Evidence and implementation boundaries
 
@@ -164,7 +166,7 @@ Route: `/annotations`.
 
 **Current:** Working personal evidence ledger with numeric version ordering, same-version discrepancy checks, exact-context comparisons and report provenance. Manual source transcriptions are not independently verified, matched to uploaded genotypes or refreshed online.
 
-**Next:** Validate a pinned ClinVar release adapter against independently checked reference records, including merged accessions, condition aliases and reference-allele checks. Medicine Checker is the next remaining demo module.
+**Next:** Validate a pinned ClinVar release adapter against independently checked reference records, including merged accessions, condition aliases and reference-allele checks. Medicine Checker now has a source plan register; external annotation remains unimplemented.
 
 **References:** [NCBI ClinVar public prototypes](https://github.com/ncbi/clinvar), [DNABERT-2 model, implementation and ICLR 2024 paper](https://huggingface.co/zhihan1996/DNABERT-2-117M), [ClinVar documentation](https://www.ncbi.nlm.nih.gov/clinvar/docs/).
 
@@ -172,17 +174,17 @@ Route: `/annotations`.
 
 Route: `/medicine`.
 
-**Inputs:** Drug identity and a clinically established PGx result
+**Inputs:** Reviewed product/ingredient strengths, route, explicit fixed-daily or PRN source instructions, status and calendar dates
 
-**Method:** Resolve the gene–drug pair → Check guideline coverage → Show evidence and review needs
+**Method:** Preserve source quantity and schedule → Gate date, route, ingredient label and unit dimension → Review scheduled subtotals, optional PRN ceilings and repeated labels
 
-**Output:** Source-linked gene–drug evidence table
+**Output:** Editable source plan, dated ingredient review, inclusion/exclusion reasons, arithmetic provenance, CSV/JSON and personal report
 
-**Current:** Drug checks are illustrative and do not use your genome upload.
+**Current:** Working local medication source register and deterministic plan arithmetic. Unknown quantities and complex schedules stay unresolved; source-listed PRN ceilings are not safe limits. No interaction, contraindication or personal PGx assessment is installed.
 
-**Next:** Import validated PharmCAT reports with guideline version and coverage; distinguish drug–gene from drug–drug interactions.
+**Next:** Validate a pinned external medication/PharmCAT report adapter with person/identity, guideline version and coverage checks before any gene–drug or drug–drug claim. Family Hub is the next demo section, pending isolated person profiles.
 
-**References:** [PharmCAT](https://github.com/PharmGKB/PharmCAT), [CPIC guidelines](https://cpicpgx.org/guidelines/).
+**References:** [Medplum medication order boundary and validation](https://github.com/medplum/medplum/blob/88af41c092baed5ad35dfa603df17353d3e33e48/packages/react-hooks/src/useMedicationOrder/useMedicationOrder.ts), [HL7 FHIR R4 MedicationStatement and Dosage](https://hl7.org/fhir/R4/medicationstatement.html), [MedExtractor extraction model and medication-regimen research screening](https://huggingface.co/lion-ai/medextractor-nano).
 
 ### Blood Work
 
@@ -329,6 +331,30 @@ Route: `/import`.
 **References:** [Open mHealth schemas](https://github.com/openmhealth/schemas), [apriha/snps](https://github.com/apriha/snps), [Medplum results and review](https://www.medplum.com/docs/labs-imaging/results-and-review), [MedGemma 1.5 4B model card](https://huggingface.co/google/medgemma-1.5-4b-it).
 
 ## Source register
+
+### Medplum medication order boundary and validation
+
+[Repository](https://github.com/medplum/medplum/blob/88af41c092baed5ad35dfa603df17353d3e33e48/packages/react-hooks/src/useMedicationOrder/useMedicationOrder.ts) · reviewed 2026-11-22.
+
+Pattern: Keep source records, typed validation and prescribing/provider operations as distinct boundaries, with explicit failures for unexpected data contracts.
+
+Boundary: Apache-2.0 source inspected at 88af41c092baed5ad35dfa603df17353d3e33e48. Design reference only; no code copied, EHR connected, medication ordered or vendor service installed.
+
+### HL7 FHIR R4 MedicationStatement and Dosage
+
+[Documentation](https://hl7.org/fhir/R4/medicationstatement.html) · reviewed 2026-11-22.
+
+Pattern: Keep reported medication information separate from administration, retaining original dosage instructions, as-needed status, dates and source.
+
+Boundary: Design/data semantics only; Symphony is not a FHIR medication importer, prescribing system or clinical interaction checker.
+
+### MedExtractor extraction model and medication-regimen research screening
+
+[Model card](https://huggingface.co/lion-ai/medextractor-nano) · reviewed 2026-11-22.
+
+Pattern: Field extraction performance and source uncertainty must be evaluated separately from quantity arithmetic or medication safety.
+
+Boundary: Revision 502b731aeafe44ae802f87134c7b969d0d7acb9f identifies itself as MedExtractor Liquid. Model card restricts use to non-commercial/research and reports synthetic clinical validation only. Deferred: no weights/code executed or terms accepted; arXiv:1912.04961v3 was separately screened, not reproduced.
 
 ### NCBI ClinVar public prototypes
 
@@ -557,7 +583,7 @@ Boundary: Our fixed-window observed summaries and quality gates are an explorato
 ## Next development sequence
 
 1. Collect user feedback on the proposed UI baseline and refine the same theme; visual acceptance remains pending.
-2. Turn Medicine Checker into a working source-linked medication inventory and reviewed exposure workflow; establish curated interaction/reference coverage before any interaction claim. Genome Tracker now supports its documented manual evidence ledger.
+2. Build isolated person profiles as the foundation for a working Family Hub; keep personal versus demo/family records separate and require source-backed family-history entries before analysis. Medicine Checker now supports its documented source plan review.
 3. Add user-confirmed CGM cadence/time zone and independent package reference comparisons, then reviewed analyte mappings and unit conversions preserving original values.
 4. Introduce isolated personal/family profiles and source-document review before sharing or family analyses; evaluate extraction on de-identified field-level references.
 5. Validate a pinned ClinVar release adapter with merged accession, condition-alias and reference-allele checks; then evaluate external pipeline reports with explicit build, allele and cohort context.

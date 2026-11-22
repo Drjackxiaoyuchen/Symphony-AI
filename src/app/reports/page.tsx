@@ -22,6 +22,7 @@ import {
   genomeEvidenceSchema,
   validateEvidenceSet,
 } from "@/lib/genome-evidence";
+import { medicationSchema, validateMedicationSet } from "@/lib/medications";
 import { medicalRecordSchema, validateRecordSet } from "@/lib/medical-records";
 import {
   supplementSchema,
@@ -46,6 +47,12 @@ export default function ReportsPage() {
     genomeEvidenceSchema,
     validateEvidenceSet,
   );
+  const medications = useLedger(
+    KEYS.medications,
+    "medications",
+    medicationSchema,
+    validateMedicationSet,
+  );
   const supplements = useLedger(
       KEYS.supplements,
       "supplements",
@@ -64,6 +71,7 @@ export default function ReportsPage() {
       workouts: workouts.stored,
       records: records.error ? null : records.stored,
       evidence: evidence.error ? null : evidence.stored,
+      medications: medications.error ? null : medications.stored,
     },
     generatedAt,
   );
@@ -101,6 +109,8 @@ export default function ReportsPage() {
               !records.ready ||
               !!records.error ||
               !evidence.ready ||
+              !medications.ready ||
+              !!medications.error ||
               !!evidence.error
             }
             onClick={() =>
@@ -401,7 +411,20 @@ export default function ReportsPage() {
             Open Genome Tracker
           </Link>
         </div>
+        <div className="mt-5 pt-4 border-t border-cream-300 text-caption text-stone-600">
+          <strong>Medication source plan</strong>
+          <p>
+            {report.medications?.entries.length || 0} saved records. Full JSON
+            includes a dated ingredient review using the UTC report date, source
+            quantities and explicit coverage limits; no drug interaction or
+            prescribing advice.
+          </p>
+          <Link href="/medicine" className="text-copper-700 underline no-print">
+            Open Medicine Checker
+          </Link>
+        </div>
         {[
+          medications.error,
           supplements.error,
           meals.error,
           workouts.error,

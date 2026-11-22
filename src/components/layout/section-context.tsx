@@ -13,6 +13,7 @@ import {
   genomeEvidenceSchema,
   validateEvidenceSet,
 } from "@/lib/genome-evidence";
+import { medicationSchema, validateMedicationSet } from "@/lib/medications";
 import { medicalRecordSchema, validateRecordSet } from "@/lib/medical-records";
 import {
   supplementSchema,
@@ -45,25 +46,34 @@ export default function SectionContext() {
     genomeEvidenceSchema,
     validateEvidenceSet,
   );
+  const medications = useLedger(
+    KEYS.medications,
+    "medications",
+    medicationSchema,
+    validateMedicationSet,
+  );
   if (!guide) return null;
   const saved =
-    guide.mode === "evidence"
-      ? evidence.entries.length
-      : guide.mode === "records"
-        ? records.entries.length
-        : guide.mode === "supplements"
-          ? supplements.entries.length
-          : guide.mode === "meals"
-            ? meals.entries.length
-            : guide.mode === "workouts"
-              ? workouts.entries.length
-              : 0;
+    guide.mode === "medications"
+      ? medications.entries.length
+      : guide.mode === "evidence"
+        ? evidence.entries.length
+        : guide.mode === "records"
+          ? records.entries.length
+          : guide.mode === "supplements"
+            ? supplements.entries.length
+            : guide.mode === "meals"
+              ? meals.entries.length
+              : guide.mode === "workouts"
+                ? workouts.entries.length
+                : 0;
   const workingLedger = [
     "supplements",
     "meals",
     "workouts",
     "records",
     "evidence",
+    "medications",
   ].includes(guide.mode);
   const personal =
     guide.mode === "cgm"

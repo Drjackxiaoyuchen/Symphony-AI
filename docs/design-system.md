@@ -32,4 +32,6 @@ Use copper for interactive emphasis and continuous audit scales. Muted sage/rose
 
 2026-11-21: Genome Tracker uses the same scheme for a source register, neutral classification text, inspection flags, source chronology, responsive identity/source fields and portable evidence tools. No theme tokens changed; UI acceptance remains pending.
 
-Next: collect visual feedback and continue the same scheme in Medicine Checker. Keep scientific validation independent from visual acceptance.
+2026-11-22: Medicine Checker extends the same cards, controls and typography to source records, responsive ingredient fields, dated quantity review and inspectable arithmetic. No theme token changed; UI acceptance remains pending.
+
+Next: collect visual feedback and continue the same scheme in isolated person profiles and Family Hub. Keep scientific validation independent from visual acceptance.
