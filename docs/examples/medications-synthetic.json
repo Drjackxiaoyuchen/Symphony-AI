@@ -1,0 +1,286 @@
+{
+  "format": "symphony-ledger-v1",
+  "kind": "medications",
+  "updatedAt": "2026-11-22T01:00:00Z",
+  "entries": [
+    {
+      "id": "tablet",
+      "name": "Synthetic tablet A",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 0.5,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 25,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 1
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "liquid",
+      "name": "Synthetic liquid B",
+      "route": "oral",
+      "form": "Synthetic liquid",
+      "doseUnit": "mL",
+      "unitsPerDose": 2,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 5,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 3
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "prn",
+      "name": "Synthetic optional C",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 2,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 10,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "as-needed",
+        "maxDosesPerDay": 3
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "unknown-prn",
+      "name": "Synthetic optional D",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 1,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Beta",
+          "amount": 15,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "as-needed",
+        "maxDosesPerDay": null
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "complex",
+      "name": "Synthetic complex E",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 1,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Gamma",
+          "amount": 1,
+          "unit": "g"
+        }
+      ],
+      "schedule": {
+        "kind": "unresolved"
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "Synthetic complex schedule; leave unresolved, do not infer a daily average.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "unknown-start",
+      "name": "Synthetic unknown-date F",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 0.5,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 25,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 1
+      },
+      "status": "active plan",
+      "startOn": null,
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "hold",
+      "name": "Synthetic held G",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 0.5,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 25,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 1
+      },
+      "status": "on hold",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "topical",
+      "name": "Synthetic topical H",
+      "route": "topical",
+      "form": "Synthetic cream",
+      "doseUnit": "application",
+      "unitsPerDose": 2,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 500,
+          "unit": "mcg"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 1
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "missing-strength",
+      "name": "Synthetic unknown-strength I",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 1,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Delta",
+          "amount": null,
+          "unit": "mg"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 1
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    },
+    {
+      "id": "separate-unit",
+      "name": "Synthetic separate-unit J",
+      "route": "oral",
+      "form": "Synthetic immediate-release tablet",
+      "doseUnit": "tablet",
+      "unitsPerDose": 1,
+      "ingredients": [
+        {
+          "name": "Synthetic ingredient Alpha",
+          "amount": 1,
+          "unit": "IU"
+        }
+      ],
+      "schedule": {
+        "kind": "daily",
+        "dosesPerDay": 1
+      },
+      "status": "active plan",
+      "startOn": "2026-11-01",
+      "lastOn": "2026-11-30",
+      "source": "Synthetic QA label \u2014 invented product, not a prescription",
+      "sourceUrl": "",
+      "instructions": "SYNTHETIC QA ONLY: invented product and regimen, not a prescription.",
+      "notes": "",
+      "reviewedAt": "2026-11-22T01:00:00Z",
+      "origin": "manual source transcription"
+    }
+  ]
+}

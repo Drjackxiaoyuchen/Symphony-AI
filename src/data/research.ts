@@ -1,5 +1,5 @@
 // Reviewed public references. These are design/method references, not live integrations.
-export const RESEARCH_DATE = "2026-11-21";
+export const RESEARCH_DATE = "2026-11-22";
 export type ResearchSource = {
   id: string;
   title: string;
@@ -10,6 +10,40 @@ export type ResearchSource = {
   reviewedAt?: string; // Original sources: 2026-11-16; newer reviews override this.
 };
 export const RESEARCH_SOURCES: ResearchSource[] = [
+  {
+    id: "medplum-medications",
+    title: "Medplum medication order boundary and validation",
+    kind: "Repository",
+    url: "https://github.com/medplum/medplum/blob/88af41c092baed5ad35dfa603df17353d3e33e48/packages/react-hooks/src/useMedicationOrder/useMedicationOrder.ts",
+    reviewedAt: "2026-11-22",
+    learning:
+      "Keep source records, typed validation and prescribing/provider operations as distinct boundaries, with explicit failures for unexpected data contracts.",
+    boundary:
+      "Apache-2.0 source inspected at 88af41c092baed5ad35dfa603df17353d3e33e48. Design reference only; no code copied, EHR connected, medication ordered or vendor service installed.",
+  },
+  {
+    id: "fhir-medication",
+    title: "HL7 FHIR R4 MedicationStatement and Dosage",
+    kind: "Documentation",
+    url: "https://hl7.org/fhir/R4/medicationstatement.html",
+    reviewedAt: "2026-11-22",
+    learning:
+      "Keep reported medication information separate from administration, retaining original dosage instructions, as-needed status, dates and source.",
+    boundary:
+      "Design/data semantics only; Symphony is not a FHIR medication importer, prescribing system or clinical interaction checker.",
+  },
+  {
+    id: "medextractor-screen",
+    title:
+      "MedExtractor extraction model and medication-regimen research screening",
+    kind: "Model card",
+    url: "https://huggingface.co/lion-ai/medextractor-nano",
+    reviewedAt: "2026-11-22",
+    learning:
+      "Field extraction performance and source uncertainty must be evaluated separately from quantity arithmetic or medication safety.",
+    boundary:
+      "Revision 502b731aeafe44ae802f87134c7b969d0d7acb9f identifies itself as MedExtractor Liquid. Model card restricts use to non-commercial/research and reports synthetic clinical validation only. Deferred: no weights/code executed or terms accepted; arXiv:1912.04961v3 was separately screened, not reproduced.",
+  },
   {
     id: "clinvar-prototypes",
     title: "NCBI ClinVar public prototypes",
@@ -312,6 +346,7 @@ export type SectionGuide = {
     | "supplements"
     | "meals"
     | "workouts"
+    | "medications"
     | "evidence"
     | "records";
   // Medical records are a local register, independent from the illustrative clinical pages.
@@ -468,24 +503,27 @@ export const SECTION_GUIDES: SectionGuide[] = [
       "Local evidence register, version transitions, source/conflict flags, CSV and reviewed JSON backups",
     current:
       "Working personal evidence ledger with numeric version ordering, same-version discrepancy checks, exact-context comparisons and report provenance. Manual source transcriptions are not independently verified, matched to uploaded genotypes or refreshed online.",
-    next: "Validate a pinned ClinVar release adapter against independently checked reference records, including merged accessions, condition aliases and reference-allele checks. Medicine Checker is the next remaining demo module.",
+    next: "Validate a pinned ClinVar release adapter against independently checked reference records, including merged accessions, condition aliases and reference-allele checks. Medicine Checker now has a source plan register; external annotation remains unimplemented.",
     sources: ["clinvar", "clinvar-prototypes", "dnabert2-screen"],
   },
   {
     path: "/medicine",
     title: "Medicine Checker",
     group: "Clinical & family",
-    mode: "demo",
-    inputs: "Drug identity and a clinically established PGx result",
+    mode: "medications",
+    inputs:
+      "Reviewed product/ingredient strengths, route, explicit fixed-daily or PRN source instructions, status and calendar dates",
     pipeline: [
-      "Resolve the gene–drug pair",
-      "Check guideline coverage",
-      "Show evidence and review needs",
+      "Preserve source quantity and schedule",
+      "Gate date, route, ingredient label and unit dimension",
+      "Review scheduled subtotals, optional PRN ceilings and repeated labels",
     ],
-    output: "Source-linked gene–drug evidence table",
-    current: "Drug checks are illustrative and do not use your genome upload.",
-    next: "Import validated PharmCAT reports with guideline version and coverage; distinguish drug–gene from drug–drug interactions.",
-    sources: ["pharmcat", "cpic"],
+    output:
+      "Editable source plan, dated ingredient review, inclusion/exclusion reasons, arithmetic provenance, CSV/JSON and personal report",
+    current:
+      "Working local medication source register and deterministic plan arithmetic. Unknown quantities and complex schedules stay unresolved; source-listed PRN ceilings are not safe limits. No interaction, contraindication or personal PGx assessment is installed.",
+    next: "Validate a pinned external medication/PharmCAT report adapter with person/identity, guideline version and coverage checks before any gene–drug or drug–drug claim. Family Hub is the next demo section, pending isolated person profiles.",
+    sources: ["fhir-medication", "medplum-medications", "medextractor-screen"],
   },
   {
     path: "/bloodwork",

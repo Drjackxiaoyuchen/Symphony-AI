@@ -8,7 +8,15 @@ Personal measurements and illustrative results have distinct labels. The daily-r
 
 ![Symphony AI glucose workspace — proposed UI with synthetic data](docs/screenshots/symphony-glucose-overview-2026-11-19.jpg)
 
-## Latest revision for UI review — 2026-11-21
+## Latest revision for UI review — 2026-11-22
+
+**Medicine Checker now works with your own source plan.** Add/edit product strengths and multi-ingredient labels, keep original instructions, distinguish fixed daily, as-needed and unresolved schedules, and review dated ingredient quantities with source-level arithmetic. Unknown strengths/start dates remain explicit; repeated exact labels are inspection flags. CSV/JSON backups and the personal report retain provenance. The previous illustrative drug/genome advice has been removed from this section.
+
+![Medicine Checker — proposed UI using invented synthetic records](docs/screenshots/symphony-medication-plan-2026-11-22.jpg)
+
+See [method, scientific limits and references](docs/methods/medication-plan-v1.md), [synthetic source-plan backup](docs/examples/medications-synthetic.json) and [mobile preview](docs/screenshots/symphony-medication-plan-mobile-2026-11-22.jpg). In a disposable local workspace, use **Medicine Checker → Import JSON backup**, review the invented records, restore, then select **2026-11-22** for the reference review. Restoration replaces this module's existing ledger. This is a source-plan calculation, not confirmed intake, an interaction checker or prescribing advice. **UI acceptance remains with the user.**
+
+## Genome Tracker revision — 2026-11-21
 
 **Genome Tracker is now a working evidence register.** Add condition-specific germline SNV source snapshots, keep version history, inspect changes and saved discrepancies, search/filter, remove/undo and export CSV or reviewed JSON backups. Exact assembly, forward alleles, condition and source accession stay separate. Classification text is transcribed from the source; no clinical prediction or personal genotype match is made.
 
@@ -51,6 +59,7 @@ Open [localhost:3000](http://localhost:3000). Node.js 20 or newer is recommended
 | Dashboard        | Personal daily records and imported measurements with their own windows; no fixed health score                                                        |
 | Reports & Export | Personal JSON report, normalized CGM/lab/matched-call CSVs, hourly profile CSV and printable summary                                                  |
 | Research Library | Searchable methods, public references and next improvements for all 18 original sections                                                              |
+| Medicine Checker | Source medication plans, daily/PRN quantity review, repeated-label inspection, source arithmetic, edit/remove/undo, CSV/JSON and reports              |
 | Genome Tracker   | Manual germline SNV source snapshots, condition-specific version histories, discrepancy flags, search, remove/undo, CSV/JSON and report provenance    |
 | Medical Records  | Personal source register, reviewed single-report FHIR subset, linked observations, editing/remove/undo, search/filter, backups and provenance exports |
 | Other sections   | Labeled, fixed illustrative data; personal uploads do not generate their scores, recommendations or family profiles                                   |
@@ -114,9 +123,9 @@ The full personal report is now `symphony-report-v2` and includes these ledgers,
 
 ## Research-informed development
 
-The [Research Library](http://localhost:3000/research) maps 28 public references to all 18 original sections. [Development notes](docs/research-informed-development.md) record the adopted patterns, remaining work and evidence boundaries. References include Nightscout, iglu, Open mHealth, Open Food Facts, wger, Medplum, ClinVar, GWAS Catalog, PGS Catalog Calculator, PharmCAT, CPIC, a Hugging Face MedGemma model card and Function's public product announcement.
+The [Research Library](http://localhost:3000/research) maps 31 public references to all 18 original sections. [Development notes](docs/research-informed-development.md) record the adopted patterns, remaining work and evidence boundaries. References include Nightscout, iglu, Open mHealth, Open Food Facts, wger, Medplum, ClinVar, GWAS Catalog, PGS Catalog Calculator, PharmCAT, CPIC, a Hugging Face MedGemma model card and Function's public product announcement.
 
-Sources inform design and method choices; their code, models, databases and proprietary algorithms are not installed or reproduced. Links open source websites without attaching uploaded datasets. The initial references were reviewed on **2026-11-16**, with glucose-audit references added on **2026-11-19** and Medical Records references reviewed on **2026-11-20**, and Genome Tracker sources reviewed on **2026-11-21**; individual review dates are retained. A separate local Codex task is scheduled daily at 09:00 Asia/Shanghai for incremental research and implementation; normal app sessions do not refresh evidence in the background.
+Sources inform design and method choices; their code, models, databases and proprietary algorithms are not installed or reproduced. Links open source websites without attaching uploaded datasets. The initial references were reviewed on **2026-11-16**, with glucose-audit references added on **2026-11-19** and Medical Records references reviewed on **2026-11-20**, and Genome Tracker sources reviewed on **2026-11-21**. Medication source/validation references were reviewed on **2026-11-22**; individual review dates are retained. A separate local Codex task is scheduled daily at 09:00 Asia/Shanghai for incremental research and implementation; normal app sessions do not refresh evidence in the background.
 
 ## Storage and exports
 
