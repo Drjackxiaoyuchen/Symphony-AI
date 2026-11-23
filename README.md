@@ -8,7 +8,15 @@ Personal measurements and illustrative results have distinct labels. The daily-r
 
 ![Symphony AI glucose workspace — proposed UI with synthetic data](docs/screenshots/symphony-glucose-overview-2026-11-19.jpg)
 
-## Latest revision for UI review — 2026-11-22
+## Latest revision for UI review — 2026-11-23
+
+**Family Hub now works with separate people and source histories.** Add/edit aliases and reported parent/caregiver links; record reported-present, explicitly-denied and unknown findings with their sources. Relationship references, directed cycles, entered year context and draft ownership are validated. Mixed historical assertions stay visible for review. Remove/undo, person-specific CSV/JSON and reviewed whole-workspace backups are available.
+
+![Family Hub — proposed UI with invented people and source records](docs/screenshots/symphony-family-profiles-2026-11-23.jpg)
+
+See [method, reference cases and boundaries](docs/methods/family-history-v1.md), [synthetic backup](docs/examples/family-profiles-synthetic.json) and [mobile preview](docs/screenshots/symphony-family-profiles-mobile-2026-11-23.jpg). In a disposable local workspace, use **Family Hub → Import JSON backup**, review, then restore. A whole-workspace restore replaces the existing Family Hub data. Existing personal imports remain unassigned and are not copied to relatives. The main personal report includes Family Hub counts only; selected-person exports are separate. No genetic relatedness, inheritance or disease risk is inferred. **UI acceptance remains with the user.**
+
+## Medicine Checker revision — 2026-11-22
 
 **Medicine Checker now works with your own source plan.** Add/edit product strengths and multi-ingredient labels, keep original instructions, distinguish fixed daily, as-needed and unresolved schedules, and review dated ingredient quantities with source-level arithmetic. Unknown strengths/start dates remain explicit; repeated exact labels are inspection flags. CSV/JSON backups and the personal report retain provenance. The previous illustrative drug/genome advice has been removed from this section.
 
@@ -47,22 +55,23 @@ Open [localhost:3000](http://localhost:3000). Node.js 20 or newer is recommended
 
 ## What works with your data
 
-| Section          | Current behavior                                                                                                                                      |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Import Data      | Preview CGM, raw genotype and laboratory files; review notes before replacing the saved dataset                                                       |
-| Glucose & Diet   | Date-selectable trace, duration-weighted metrics, hourly coverage audit, missing-time TIR bounds, calendar completeness and exploratory hourly bands  |
-| Blood Work       | CSV import, searchable marker/unit/lab series, source reference intervals and dated histories                                                         |
-| Genomics         | Display uploaded calls that match a small 22-record rsID panel; keep the original demo explorer visibly separate                                      |
-| Supplements      | Saved products and ingredients, declared label amounts, planned daily totals, overlap review, pause/resume and portable backups                       |
-| Diet & Nutrition | Dated meals, gram-based portions, label/database nutrient sources, planned/eaten separation and observed CGM context                                  |
-| Fitness          | Planned/completed sessions, editable sets, normalized external-load volume and dated activity summaries                                               |
-| Dashboard        | Personal daily records and imported measurements with their own windows; no fixed health score                                                        |
-| Reports & Export | Personal JSON report, normalized CGM/lab/matched-call CSVs, hourly profile CSV and printable summary                                                  |
-| Research Library | Searchable methods, public references and next improvements for all 18 original sections                                                              |
-| Medicine Checker | Source medication plans, daily/PRN quantity review, repeated-label inspection, source arithmetic, edit/remove/undo, CSV/JSON and reports              |
-| Genome Tracker   | Manual germline SNV source snapshots, condition-specific version histories, discrepancy flags, search, remove/undo, CSV/JSON and report provenance    |
-| Medical Records  | Personal source register, reviewed single-report FHIR subset, linked observations, editing/remove/undo, search/filter, backups and provenance exports |
-| Other sections   | Labeled, fixed illustrative data; personal uploads do not generate their scores, recommendations or family profiles                                   |
+| Section          | Current behavior                                                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Import Data      | Preview CGM, raw genotype and laboratory files; review notes before replacing the saved dataset                                                              |
+| Glucose & Diet   | Date-selectable trace, duration-weighted metrics, hourly coverage audit, missing-time TIR bounds, calendar completeness and exploratory hourly bands         |
+| Blood Work       | CSV import, searchable marker/unit/lab series, source reference intervals and dated histories                                                                |
+| Genomics         | Display uploaded calls that match a small 22-record rsID panel; keep the original demo explorer visibly separate                                             |
+| Supplements      | Saved products and ingredients, declared label amounts, planned daily totals, overlap review, pause/resume and portable backups                              |
+| Diet & Nutrition | Dated meals, gram-based portions, label/database nutrient sources, planned/eaten separation and observed CGM context                                         |
+| Fitness          | Planned/completed sessions, editable sets, normalized external-load volume and dated activity summaries                                                      |
+| Dashboard        | Personal daily records and imported measurements with their own windows; no fixed health score                                                               |
+| Reports & Export | Personal JSON report, normalized CGM/lab/matched-call CSVs, hourly profile CSV and printable summary                                                         |
+| Research Library | Searchable methods, public references and next improvements for all 18 original sections                                                                     |
+| Family Hub       | Separate person-owned source histories, typed relationship links, graph/date/ownership validation, mixed-assertion review, scoped CSV/JSON and whole backups |
+| Medicine Checker | Source medication plans, daily/PRN quantity review, repeated-label inspection, source arithmetic, edit/remove/undo, CSV/JSON and reports                     |
+| Genome Tracker   | Manual germline SNV source snapshots, condition-specific version histories, discrepancy flags, search, remove/undo, CSV/JSON and report provenance           |
+| Medical Records  | Personal source register, reviewed single-report FHIR subset, linked observations, editing/remove/undo, search/filter, backups and provenance exports        |
+| Other sections   | Labeled, fixed illustrative data; personal uploads do not generate their scores, recommendations or family profiles                                          |
 
 The interface, metadata and exported reports use **Symphony AI**. The sidebar includes section search and mobile navigation.
 
@@ -123,9 +132,9 @@ The full personal report is now `symphony-report-v2` and includes these ledgers,
 
 ## Research-informed development
 
-The [Research Library](http://localhost:3000/research) maps 31 public references to all 18 original sections. [Development notes](docs/research-informed-development.md) record the adopted patterns, remaining work and evidence boundaries. References include Nightscout, iglu, Open mHealth, Open Food Facts, wger, Medplum, ClinVar, GWAS Catalog, PGS Catalog Calculator, PharmCAT, CPIC, a Hugging Face MedGemma model card and Function's public product announcement.
+The [Research Library](http://localhost:3000/research) maps 33 public references to all 18 original sections. [Development notes](docs/research-informed-development.md) record the adopted patterns, remaining work and evidence boundaries. References include Nightscout, iglu, Open mHealth, Open Food Facts, wger, Medplum, ClinVar, GWAS Catalog, PGS Catalog Calculator, PharmCAT, CPIC, a Hugging Face MedGemma model card and Function's public product announcement.
 
-Sources inform design and method choices; their code, models, databases and proprietary algorithms are not installed or reproduced. Links open source websites without attaching uploaded datasets. The initial references were reviewed on **2026-11-16**, with glucose-audit references added on **2026-11-19** and Medical Records references reviewed on **2026-11-20**, and Genome Tracker sources reviewed on **2026-11-21**. Medication source/validation references were reviewed on **2026-11-22**; individual review dates are retained. A separate local Codex task is scheduled daily at 09:00 Asia/Shanghai for incremental research and implementation; normal app sessions do not refresh evidence in the background.
+Sources inform design and method choices; their code, models, databases and proprietary algorithms are not installed or reproduced. Links open source websites without attaching uploaded datasets. The initial references were reviewed on **2026-11-16**, with glucose-audit references added on **2026-11-19** and Medical Records references reviewed on **2026-11-20**, and Genome Tracker sources reviewed on **2026-11-21**. Medication source/validation references were reviewed on **2026-11-22**; Family Hub sources were reviewed on **2026-11-23**; individual review dates are retained. A separate local Codex task is scheduled daily at 09:00 Asia/Shanghai for incremental research and implementation; normal app sessions do not refresh evidence in the background.
 
 ## Storage and exports
 
@@ -147,6 +156,6 @@ Tests also cover label unit/basis handling, planned/completed separation, missin
 
 ## Use and limitations
 
-The demo includes a fictional Morgan family and illustrative genetic, clinical and lifestyle interpretations. These examples have not been validated for clinical decisions. Imported measurements are useful for personal organization and exploration; the application does not diagnose conditions or recommend medication changes.
+Remaining demonstration pages include a fictional Morgan family and illustrative genetic, clinical and lifestyle interpretations. The working Family Hub contains only entered profiles and does not use these fictional people. These examples have not been validated for clinical decisions. Imported measurements are useful for personal organization and exploration; the application does not diagnose conditions or recommend medication changes.
 
 Demo / educational use only. No warranty. The `symphony-*.jpg` screenshots show the refreshed interface with synthetic examples. Other screenshots in `docs/screenshots` predate the refresh and are historical references.

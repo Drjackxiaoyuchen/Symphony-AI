@@ -41,6 +41,7 @@ export function LedgerTools<T extends { name: string }>({
   stored,
   onRestore,
   disabled,
+  exportDisabled,
   summarize,
 }: {
   kind: string;
@@ -49,6 +50,7 @@ export function LedgerTools<T extends { name: string }>({
   stored: Ledger<T> | null;
   onRestore: (value: unknown) => void;
   disabled?: boolean;
+  exportDisabled?: boolean;
   summarize: (entry: T) => string;
 }) {
   const input = useRef<HTMLInputElement>(null);
@@ -75,7 +77,7 @@ export function LedgerTools<T extends { name: string }>({
               "application/json",
             )
           }
-          disabled={disabled}
+          disabled={disabled || exportDisabled}
         >
           <Download size={13} />
           Export JSON backup
