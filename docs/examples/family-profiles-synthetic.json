@@ -1,0 +1,186 @@
+{
+  "format": "symphony-ledger-v1",
+  "kind": "family-profiles",
+  "updatedAt": "2026-11-23T01:00:00Z",
+  "entries": [
+    {
+      "id": "person-index",
+      "name": "Example Rowan",
+      "isIndex": true,
+      "birthYear": 1990,
+      "lifeStatus": "unknown",
+      "deathYear": null,
+      "source": "Synthetic profile note",
+      "sourceUrl": "",
+      "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+      "reviewedAt": "2026-11-23T01:00:00Z",
+      "parents": [
+        {
+          "personId": "person-a",
+          "kind": "biological",
+          "source": "Synthetic relationship source",
+          "sourceUrl": ""
+        },
+        {
+          "personId": "person-b",
+          "kind": "biological",
+          "source": "Synthetic relationship source",
+          "sourceUrl": ""
+        },
+        {
+          "personId": "person-care",
+          "kind": "guardian",
+          "source": "Synthetic relationship source",
+          "sourceUrl": ""
+        }
+      ],
+      "history": [
+        {
+          "id": "hi",
+          "condition": "Example finding Alpha",
+          "assertion": "unknown",
+          "assessedOn": null,
+          "onsetAgeYears": null,
+          "source": "Synthetic source note",
+          "sourceUrl": "",
+          "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+          "capturedAt": "2026-11-23T01:00:00Z"
+        },
+        {
+          "id": "hj",
+          "condition": "Example finding Delta",
+          "assertion": "reported present",
+          "assessedOn": "2026-11-01",
+          "onsetAgeYears": 0,
+          "source": "Synthetic source note",
+          "sourceUrl": "",
+          "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+          "capturedAt": "2026-11-23T01:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "person-a",
+      "name": "Example Parent A",
+      "isIndex": false,
+      "birthYear": 1960,
+      "lifeStatus": "unknown",
+      "deathYear": null,
+      "source": "Synthetic profile note",
+      "sourceUrl": "",
+      "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+      "reviewedAt": "2026-11-23T01:00:00Z",
+      "parents": [],
+      "history": [
+        {
+          "id": "ha",
+          "condition": "Example finding Alpha",
+          "assertion": "reported present",
+          "assessedOn": "2020-11-01",
+          "onsetAgeYears": 40,
+          "source": "Synthetic source note",
+          "sourceUrl": "",
+          "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+          "capturedAt": "2026-11-23T01:00:00Z"
+        },
+        {
+          "id": "hb",
+          "condition": "EXAMPLE finding alpha",
+          "assertion": "explicitly denied",
+          "assessedOn": "2019-11-01",
+          "onsetAgeYears": null,
+          "source": "Synthetic source note",
+          "sourceUrl": "",
+          "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+          "capturedAt": "2026-11-23T01:00:00Z"
+        },
+        {
+          "id": "hc",
+          "condition": "Example finding Beta",
+          "assertion": "unknown",
+          "assessedOn": null,
+          "onsetAgeYears": null,
+          "source": "Synthetic source note",
+          "sourceUrl": "",
+          "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+          "capturedAt": "2026-11-23T01:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "person-b",
+      "name": "Example Parent B",
+      "isIndex": false,
+      "birthYear": 1962,
+      "lifeStatus": "unknown",
+      "deathYear": null,
+      "source": "Synthetic profile note",
+      "sourceUrl": "",
+      "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+      "reviewedAt": "2026-11-23T01:00:00Z",
+      "parents": [],
+      "history": []
+    },
+    {
+      "id": "person-care",
+      "name": "Example Caregiver",
+      "isIndex": false,
+      "birthYear": 1970,
+      "lifeStatus": "unknown",
+      "deathYear": null,
+      "source": "Synthetic profile note",
+      "sourceUrl": "",
+      "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+      "reviewedAt": "2026-11-23T01:00:00Z",
+      "parents": [],
+      "history": []
+    },
+    {
+      "id": "person-child",
+      "name": "Example Child",
+      "isIndex": false,
+      "birthYear": 2012,
+      "lifeStatus": "unknown",
+      "deathYear": null,
+      "source": "Synthetic profile note",
+      "sourceUrl": "",
+      "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+      "reviewedAt": "2026-11-23T01:00:00Z",
+      "parents": [
+        {
+          "personId": "person-index",
+          "kind": "biological",
+          "source": "Synthetic relationship source",
+          "sourceUrl": ""
+        }
+      ],
+      "history": []
+    },
+    {
+      "id": "person-other",
+      "name": "Example Unlinked",
+      "isIndex": false,
+      "birthYear": null,
+      "lifeStatus": "unknown",
+      "deathYear": null,
+      "source": "Synthetic profile note",
+      "sourceUrl": "",
+      "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+      "reviewedAt": "2026-11-23T01:00:00Z",
+      "parents": [],
+      "history": [
+        {
+          "id": "ho",
+          "condition": "Example finding Alpha",
+          "assertion": "explicitly denied",
+          "assessedOn": null,
+          "onsetAgeYears": null,
+          "source": "Synthetic source note",
+          "sourceUrl": "",
+          "notes": "SYNTHETIC QA ONLY: invented people, sources and assertions; not clinical data.",
+          "capturedAt": "2026-11-23T01:00:00Z"
+        }
+      ]
+    }
+  ]
+}

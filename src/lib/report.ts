@@ -29,6 +29,7 @@ import {
   reviewMedicationPlan,
   type Medication,
 } from "./medications";
+import { familyWorkspaceSummary, type FamilyProfile } from "./family-history";
 import { RECORD_METHOD, type MedicalRecord } from "./medical-records";
 import {
   SECTION_GUIDES,
@@ -78,6 +79,7 @@ export function createReport(
     records?: Ledger<MedicalRecord> | null;
     evidence?: Ledger<GenomeEvidence> | null;
     medications?: Ledger<Medication> | null;
+    family?: Ledger<FamilyProfile> | null;
   },
   generatedAt = new Date().toISOString(),
 ) {
@@ -191,6 +193,7 @@ export function createReport(
             "User-entered metadata and a supported FHIR R4 projection. Original files, narrative conclusions and attachments are not stored. No diagnosis, unit conversion, range classification, or extraction model is applied. Checked status means user source review, not clinical validation.",
         }
       : null,
+    familyWorkspace: familyWorkspaceSummary(data.family),
     medications: data.medications
       ? {
           ...data.medications,
@@ -221,39 +224,43 @@ export function createReport(
       status:
         section.mode === "dashboard"
           ? "personal overview; missing values remain missing"
-          : section.mode === "medications"
-            ? data.medications?.entries.length
-              ? "saved medication source plans; no clinical interaction inference"
-              : "working medication ledger; no personal records"
-            : section.mode === "evidence"
-              ? data.evidence?.entries.length
-                ? "saved source transcriptions; no personal clinical inference"
-                : "working evidence ledger; no personal records"
-              : section.mode === "records"
-                ? data.records?.entries.length
-                  ? "saved personal source records; no clinical inference"
-                  : "working register; no personal records"
-                : section.mode === "supplements"
-                  ? data.supplements?.entries.length
-                    ? "saved label records; planned totals"
-                    : "working ledger; no personal records"
-                  : section.mode === "meals"
-                    ? data.meals?.entries.length
-                      ? "saved meal records; portion-derived nutrients"
-                      : "working diary; no personal records"
-                    : section.mode === "workouts"
-                      ? data.workouts?.entries.length
-                        ? "saved session records; completed activity totals"
-                        : "working training log; no personal records"
-                      : section.mode === "import"
-                        ? "local import workspace"
-                        : section.mode === "cgm" && cgm
-                          ? "imported observations"
-                          : section.mode === "bloodwork" && bloodwork
+          : section.mode === "family"
+            ? data.family?.entries.length
+              ? "saved family profiles; contents excluded from personal report"
+              : "working family workspace; no personal records"
+            : section.mode === "medications"
+              ? data.medications?.entries.length
+                ? "saved medication source plans; no clinical interaction inference"
+                : "working medication ledger; no personal records"
+              : section.mode === "evidence"
+                ? data.evidence?.entries.length
+                  ? "saved source transcriptions; no personal clinical inference"
+                  : "working evidence ledger; no personal records"
+                : section.mode === "records"
+                  ? data.records?.entries.length
+                    ? "saved personal source records; no clinical inference"
+                    : "working register; no personal records"
+                  : section.mode === "supplements"
+                    ? data.supplements?.entries.length
+                      ? "saved label records; planned totals"
+                      : "working ledger; no personal records"
+                    : section.mode === "meals"
+                      ? data.meals?.entries.length
+                        ? "saved meal records; portion-derived nutrients"
+                        : "working diary; no personal records"
+                      : section.mode === "workouts"
+                        ? data.workouts?.entries.length
+                          ? "saved session records; completed activity totals"
+                          : "working training log; no personal records"
+                        : section.mode === "import"
+                          ? "local import workspace"
+                          : section.mode === "cgm" && cgm
                             ? "imported observations"
-                            : section.mode === "genome" && genome
-                              ? "imported calls; demo explorer separate"
-                              : "illustrative demo; values omitted",
+                            : section.mode === "bloodwork" && bloodwork
+                              ? "imported observations"
+                              : section.mode === "genome" && genome
+                                ? "imported calls; demo explorer separate"
+                                : "illustrative demo; values omitted",
     })),
     evidence: {
       reviewedAt: RESEARCH_DATE,

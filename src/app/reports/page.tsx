@@ -22,6 +22,10 @@ import {
   genomeEvidenceSchema,
   validateEvidenceSet,
 } from "@/lib/genome-evidence";
+import {
+  familyProfileSchema,
+  validateFamilyProfiles,
+} from "@/lib/family-history";
 import { medicationSchema, validateMedicationSet } from "@/lib/medications";
 import { medicalRecordSchema, validateRecordSet } from "@/lib/medical-records";
 import {
@@ -53,6 +57,12 @@ export default function ReportsPage() {
     medicationSchema,
     validateMedicationSet,
   );
+  const family = useLedger(
+    KEYS.family,
+    "family-profiles",
+    familyProfileSchema,
+    validateFamilyProfiles,
+  );
   const supplements = useLedger(
       KEYS.supplements,
       "supplements",
@@ -72,6 +82,7 @@ export default function ReportsPage() {
       records: records.error ? null : records.stored,
       evidence: evidence.error ? null : evidence.stored,
       medications: medications.error ? null : medications.stored,
+      family: family.error ? null : family.stored,
     },
     generatedAt,
   );
@@ -109,6 +120,8 @@ export default function ReportsPage() {
               !records.ready ||
               !!records.error ||
               !evidence.ready ||
+              !family.ready ||
+              !!family.error ||
               !medications.ready ||
               !!medications.error ||
               !!evidence.error
@@ -423,7 +436,19 @@ export default function ReportsPage() {
             Open Medicine Checker
           </Link>
         </div>
+        <div className="mt-5 pt-4 border-t border-cream-300 text-caption text-stone-600">
+          <strong>Family Hub scope</strong>
+          <p>
+            {report.familyWorkspace?.profiles || 0} saved family profiles.
+            Names, relationship details and histories are excluded from this
+            personal report. Export a selected person separately in Family Hub.
+          </p>
+          <Link href="/family" className="text-copper-700 underline no-print">
+            Open Family Hub
+          </Link>
+        </div>
         {[
+          family.error,
           medications.error,
           supplements.error,
           meals.error,

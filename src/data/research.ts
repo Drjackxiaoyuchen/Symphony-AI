@@ -1,5 +1,5 @@
 // Reviewed public references. These are design/method references, not live integrations.
-export const RESEARCH_DATE = "2026-11-22";
+export const RESEARCH_DATE = "2026-11-23";
 export type ResearchSource = {
   id: string;
   title: string;
@@ -10,6 +10,29 @@ export type ResearchSource = {
   reviewedAt?: string; // Original sources: 2026-11-16; newer reviews override this.
 };
 export const RESEARCH_SOURCES: ResearchSource[] = [
+  {
+    id: "pedigreejs",
+    title: "pedigreejs relationship validation",
+    kind: "Repository",
+    url: "https://github.com/CCGE-BOADICEA/pedigreejs/tree/daa9faa61634b4f57279c7478cc918ee3fe0274c",
+    reviewedAt: "2026-11-23",
+    learning:
+      "Validate entered person identities and relationship structure before rendering or using a pedigree.",
+    boundary:
+      "GPL-3.0 source reviewed as a design/method reference; no code copied. Symphony uses its own typed graph validation and does not implement standard pedigree notation, parentage testing or a CanRisk model.",
+  },
+  {
+    id: "family-extraction",
+    title:
+      "Family-history extraction: deep learning and heuristics (JMIR 2020)",
+    kind: "Paper",
+    url: "https://medinform.jmir.org/2020/12/e22898",
+    reviewedAt: "2026-11-23",
+    learning:
+      "Correct family-member attribution, negation and observation relations are distinct from recognizing a disease term.",
+    boundary:
+      "Published n2c2 entity/relation extraction study. Our manual entry and synthetic graph/source validation do not reproduce its extraction benchmark or establish clinical validity; no corpus/model installed.",
+  },
   {
     id: "medplum-medications",
     title: "Medplum medication order boundary and validation",
@@ -201,9 +224,10 @@ export const RESEARCH_SOURCES: ResearchSource[] = [
   },
   {
     id: "fhir-family",
+    reviewedAt: "2026-11-23",
     title: "FHIR FamilyMemberHistory",
     kind: "Documentation",
-    url: "https://www.hl7.org/fhir/R4B/familymemberhistory-definitions.html",
+    url: "https://hl7.org/fhir/R4/familymemberhistory-definitions.html",
     learning:
       "Record family relationship, condition, age context and provenance per relative.",
     boundary: "One person's upload never supplies evidence about a relative.",
@@ -346,6 +370,7 @@ export type SectionGuide = {
     | "supplements"
     | "meals"
     | "workouts"
+    | "family"
     | "medications"
     | "evidence"
     | "records";
@@ -522,7 +547,7 @@ export const SECTION_GUIDES: SectionGuide[] = [
       "Editable source plan, dated ingredient review, inclusion/exclusion reasons, arithmetic provenance, CSV/JSON and personal report",
     current:
       "Working local medication source register and deterministic plan arithmetic. Unknown quantities and complex schedules stay unresolved; source-listed PRN ceilings are not safe limits. No interaction, contraindication or personal PGx assessment is installed.",
-    next: "Validate a pinned external medication/PharmCAT report adapter with person/identity, guideline version and coverage checks before any gene–drug or drug–drug claim. Family Hub is the next demo section, pending isolated person profiles.",
+    next: "Validate a pinned external medication/PharmCAT report adapter with person/identity, guideline version and coverage checks before any gene–drug or drug–drug claim. Family Hub now has separate history profiles; existing personal imports remain unassigned.",
     sources: ["fhir-medication", "medplum-medications", "medextractor-screen"],
   },
   {
@@ -548,18 +573,20 @@ export const SECTION_GUIDES: SectionGuide[] = [
     path: "/family",
     title: "Family Hub",
     group: "Clinical & family",
-    mode: "demo",
-    inputs: "Separate records and relationships for each person",
+    mode: "family",
+    inputs:
+      "Separate source-backed person profiles, typed parent/caregiver links and explicit history assertions",
     pipeline: [
-      "Select a person",
-      "Keep provenance per profile",
-      "Summarize that person's observations",
+      "Validate identities, references and directed relationships",
+      "Keep source assertions within their owning profile",
+      "Review record coverage and export one person explicitly",
     ],
-    output: "Profile-specific overview with relationship context",
+    output:
+      "Person-specific history, entered connection inspector, mixed-assertion flags, selected-person CSV/JSON and reviewed full-workspace backups",
     current:
-      "The Morgan family is fictional. Uploads apply only to the local personal workspace.",
-    next: "Add isolated profiles and explicit ownership before family sharing.",
-    sources: ["fhir-family", "phenotips"],
+      "Working local Family Hub with profile/history CRUD, source chronology, reference/cycle gates and separate exports. Existing personal imports remain unassigned; no genetics, inheritance or disease-risk prediction is performed.",
+    next: "Evaluate explicit ownership/migration previews for personal source records before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.",
+    sources: ["fhir-family", "pedigreejs", "family-extraction"],
   },
   {
     path: "/offspring",
