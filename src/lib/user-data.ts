@@ -9,6 +9,7 @@ export const KEYS = {
   meals: "symphony:meals:v1",
   workouts: "symphony:workouts:v1",
   records: "symphony:medical-records:v1",
+  ownership: "symphony:record-ownership:v1",
   family: "symphony:family-profiles:v1",
   medications: "symphony:medications:v1",
   evidence: "symphony:genome-evidence:v1",

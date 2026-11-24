@@ -1,6 +1,6 @@
 # Symphony AI: research-informed development
 
-Library updated: **2026-11-23**. Individual source review dates are retained below.
+Library updated: **2026-11-24**. Individual source review dates are retained below.
 
 This pass reviews all 18 original sections. It adopts interface and data-quality patterns while keeping unimplemented integrations and clinical interpretation explicitly separate from imported observations. The catalog behind the app and this document is `src/data/research.ts`; regenerate this document with `npm run docs:research`.
 
@@ -25,6 +25,8 @@ This pass reviews all 18 original sections. It adopts interface and data-quality
 - 2026-11-22: Medicine Checker replaces illustrative prescribing/interaction advice with a local source plan, explicit daily/PRN/unresolved schedules, date eligibility, dimensional ingredient arithmetic, source-level contributions, repeated-label inspection and portable reports. See [method and validation scope](methods/medication-plan-v1.md). No clinical interaction or PGx capability is claimed.
 
 - 2026-11-23: Family Hub now has person-owned source histories, typed and validated parent/caregiver references, explicit presence/denial/unknown assertions, mixed-source review flags, stale-form/owner guards, selected-person outputs and reviewed backups. Existing personal imports stay unassigned; family identities/histories are excluded from the main personal report. See [method and scope](methods/family-history-v1.md).
+
+- 2026-11-24: Medical Records now has explicit source-to-person attribution previews, source/person fingerprint compatibility gates, reviewed attribution backups and scoped person exports. Any attributed source is withheld from the default personal report, including stale links. See [method and validation scope](methods/record-ownership-v1.md).
 
 ## Evidence and implementation boundaries
 
@@ -150,11 +152,11 @@ Route: `/records`.
 
 **Output:** Searchable timeline, linked observations, source hash, metadata CSV and reviewed JSON backups
 
-**Current:** Working local register with editing, remove/undo, source checks, strict single-report FHIR subset import, source fingerprints and personal report export. No fictional testing advice or hospital rankings are added.
+**Current:** Working source register plus reviewed record-to-person attribution previews, fingerprint change gates and separate person exports. Legacy records stay unassigned; every attributed record is withheld from the default report, including stale links. Attribution does not authenticate identity.
 
-**Next:** Add isolated person/provider profiles and evaluate source-document storage/extraction on de-identified field-level references. Genome Tracker now has a separate source evidence register.
+**Next:** Evaluate multi-person source-store isolation and explicit source identity/namespace mappings before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.
 
-**References:** [HL7 FHIR R4 DiagnosticReport and Observation](https://hl7.org/fhir/R4/diagnosticreport.html), [Medplum results and review](https://www.medplum.com/docs/labs-imaging/results-and-review), [MedGemma 1.5 4B model card](https://huggingface.co/google/medgemma-1.5-4b-it).
+**References:** [FHIR R4 Provenance: source and attribution boundaries](https://hl7.org/fhir/R4/provenance.html), [Medplum Patient $match: ambiguity and disclosure gates](https://www.medplum.com/docs/api/fhir/operations/patient-match), [Language models for patient record linkage: evaluation limits](https://arxiv.org/abs/2504.15261v1), [HL7 FHIR R4 DiagnosticReport and Observation](https://hl7.org/fhir/R4/diagnosticreport.html).
 
 ### Genome Tracker
 
@@ -216,7 +218,7 @@ Route: `/family`.
 
 **Current:** Working local Family Hub with profile/history CRUD, source chronology, reference/cycle gates and separate exports. Existing personal imports remain unassigned; no genetics, inheritance or disease-risk prediction is performed.
 
-**Next:** Evaluate explicit ownership/migration previews for personal source records before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.
+**Next:** Medical Records now has explicit attribution previews and separate person exports. Evaluate multi-person source-store isolation before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.
 
 **References:** [pedigreejs relationship validation](https://github.com/CCGE-BOADICEA/pedigreejs/tree/daa9faa61634b4f57279c7478cc918ee3fe0274c), [Family-history extraction: deep learning and heuristics (JMIR 2020)](https://medinform.jmir.org/2020/12/e22898), [FHIR FamilyMemberHistory](https://hl7.org/fhir/R4/familymemberhistory-definitions.html).
 
@@ -333,6 +335,30 @@ Route: `/import`.
 **References:** [Open mHealth schemas](https://github.com/openmhealth/schemas), [apriha/snps](https://github.com/apriha/snps), [Medplum results and review](https://www.medplum.com/docs/labs-imaging/results-and-review), [MedGemma 1.5 4B model card](https://huggingface.co/google/medgemma-1.5-4b-it).
 
 ## Source register
+
+### FHIR R4 Provenance: source and attribution boundaries
+
+[Documentation](https://hl7.org/fhir/R4/provenance.html) · reviewed 2026-11-24.
+
+Pattern: Keep the original subject/source separate from the activity and basis that attribute a record to a local person.
+
+Boundary: R4 4.0.1 documentation (CC0), accessed 2026-11-24. Our versioned local attribution is not a conformant FHIR Provenance resource, authenticated identity, consent or an immutable audit log. No specification text or code copied.
+
+### Medplum Patient $match: ambiguity and disclosure gates
+
+[Documentation](https://www.medplum.com/docs/api/fhir/operations/patient-match) · reviewed 2026-11-24.
+
+Pattern: Candidate ranking and permission to disclose are different decisions; ambiguous identity must not silently become an accepted link.
+
+Boundary: Live documentation accessed 2026-11-24 references a draft matching guide. Repository/license inspected at 1f2c185cb97e93b4f1decbf19a19ea41ab39e8d0, Apache-2.0; documentation not pinned to that commit. No matching service/code integrated. Symphony uses explicit review, not matching scores or access control.
+
+### Language models for patient record linkage: evaluation limits
+
+[Paper](https://arxiv.org/abs/2504.15261v1) · reviewed 2026-11-24.
+
+Pattern: Evaluate identity errors and candidate-retrieval loss separately on domain-specific labeled records before adopting automation.
+
+Boundary: Preprint v1, 2025-04-21, paper CC BY-NC-ND 4.0; methods, evaluation and discussion reviewed. Cancer-registry labels used probabilistic linkage plus manual review; blocking and matching were separate experiments. Data are private PHI. No model/data copied, inference run or published accuracy reproduced locally.
 
 ### pedigreejs relationship validation
 
@@ -601,7 +627,7 @@ Boundary: Our fixed-window observed summaries and quality gates are an explorato
 ## Next development sequence
 
 1. Collect user feedback on the proposed UI baseline and refine the same theme; visual acceptance remains pending.
-2. Build a reviewed ownership-assignment preview for Medical Records, keeping legacy records unassigned unless explicitly attributed. Family Hub now owns its own profiles/history only; do not silently migrate other personal data.
+2. Complete blocked desktop/mobile browser inspection and publish attribution screenshots before merging the 2026-11-24 proposal. Then validate multi-person source-store isolation and explicit source namespaces before expanding FHIR imports. Reviewed Medical Records attribution is implemented on its proposal branch; legacy records and all other personal imports remain unassigned unless explicitly attributed.
 3. Add user-confirmed CGM cadence/time zone and independent package reference comparisons, then reviewed analyte mappings and unit conversions preserving original values.
 4. Evaluate explicit person-scoped source-document review and extraction on de-identified field-level references before sharing or family analyses. Offspring Risk/Family Comparison require verified input identity, genotype/haplotype coverage and a validated endpoint before conversion.
 5. Validate a pinned ClinVar release adapter with merged accession, condition-alias and reference-allele checks; then evaluate external pipeline reports with explicit build, allele and cohort context.

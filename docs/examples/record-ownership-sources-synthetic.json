@@ -1,0 +1,47 @@
+{
+  "format": "symphony-ledger-v1",
+  "kind": "medical-records",
+  "updatedAt": "2026-11-24T01:00:00Z",
+  "entries": [
+    {
+      "id": "ownership-source-a",
+      "name": "SYNTHETIC source A \u2014 attribution review",
+      "kind": "Visit",
+      "at": null,
+      "provider": "Invented facility A",
+      "sourceUrl": "",
+      "notes": "Invented QA record only; not a real patient or clinical finding.",
+      "checkedAt": null,
+      "origin": "manual",
+      "sourceFile": "",
+      "sourceSha256": "",
+      "importedAt": null,
+      "subject": "",
+      "reportId": "",
+      "version": "",
+      "status": "recorded by you",
+      "observations": [],
+      "warnings": []
+    },
+    {
+      "id": "ownership-source-b",
+      "name": "SYNTHETIC source B \u2014 leave unassigned",
+      "kind": "Visit",
+      "at": null,
+      "provider": "Invented facility B",
+      "sourceUrl": "",
+      "notes": "Invented QA record only; not a real patient or clinical finding.",
+      "checkedAt": null,
+      "origin": "manual",
+      "sourceFile": "",
+      "sourceSha256": "",
+      "importedAt": null,
+      "subject": "",
+      "reportId": "",
+      "version": "",
+      "status": "recorded by you",
+      "observations": [],
+      "warnings": []
+    }
+  ]
+}

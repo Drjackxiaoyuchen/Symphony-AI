@@ -1,5 +1,5 @@
 // Reviewed public references. These are design/method references, not live integrations.
-export const RESEARCH_DATE = "2026-11-23";
+export const RESEARCH_DATE = "2026-11-24";
 export type ResearchSource = {
   id: string;
   title: string;
@@ -10,6 +10,40 @@ export type ResearchSource = {
   reviewedAt?: string; // Original sources: 2026-11-16; newer reviews override this.
 };
 export const RESEARCH_SOURCES: ResearchSource[] = [
+  {
+    id: "fhir-provenance",
+    title: "FHIR R4 Provenance: source and attribution boundaries",
+    kind: "Documentation",
+    url: "https://hl7.org/fhir/R4/provenance.html",
+    reviewedAt: "2026-11-24",
+    learning:
+      "Keep the original subject/source separate from the activity and basis that attribute a record to a local person.",
+    boundary:
+      "R4 4.0.1 documentation (CC0), accessed 2026-11-24. Our versioned local attribution is not a conformant FHIR Provenance resource, authenticated identity, consent or an immutable audit log. No specification text or code copied.",
+  },
+  {
+    id: "medplum-match",
+    title: "Medplum Patient $match: ambiguity and disclosure gates",
+    kind: "Documentation",
+    url: "https://www.medplum.com/docs/api/fhir/operations/patient-match",
+    reviewedAt: "2026-11-24",
+    learning:
+      "Candidate ranking and permission to disclose are different decisions; ambiguous identity must not silently become an accepted link.",
+    boundary:
+      "Live documentation accessed 2026-11-24 references a draft matching guide. Repository/license inspected at 1f2c185cb97e93b4f1decbf19a19ea41ab39e8d0, Apache-2.0; documentation not pinned to that commit. No matching service/code integrated. Symphony uses explicit review, not matching scores or access control.",
+  },
+  {
+    id: "patient-linkage-preprint",
+    title: "Language models for patient record linkage: evaluation limits",
+    kind: "Paper",
+    url: "https://arxiv.org/abs/2504.15261v1",
+    reviewedAt: "2026-11-24",
+    learning:
+      "Evaluate identity errors and candidate-retrieval loss separately on domain-specific labeled records before adopting automation.",
+    boundary:
+      "Preprint v1, 2025-04-21, paper CC BY-NC-ND 4.0; methods, evaluation and discussion reviewed. Cancer-registry labels used probabilistic linkage plus manual review; blocking and matching were separate experiments. Data are private PHI. No model/data copied, inference run or published accuracy reproduced locally.",
+  },
+
   {
     id: "pedigreejs",
     title: "pedigreejs relationship validation",
@@ -508,9 +542,14 @@ export const SECTION_GUIDES: SectionGuide[] = [
     output:
       "Searchable timeline, linked observations, source hash, metadata CSV and reviewed JSON backups",
     current:
-      "Working local register with editing, remove/undo, source checks, strict single-report FHIR subset import, source fingerprints and personal report export. No fictional testing advice or hospital rankings are added.",
-    next: "Add isolated person/provider profiles and evaluate source-document storage/extraction on de-identified field-level references. Genome Tracker now has a separate source evidence register.",
-    sources: ["fhir-report", "medplum", "medgemma"],
+      "Working source register plus reviewed record-to-person attribution previews, fingerprint change gates and separate person exports. Legacy records stay unassigned; every attributed record is withheld from the default report, including stale links. Attribution does not authenticate identity.",
+    next: "Evaluate multi-person source-store isolation and explicit source identity/namespace mappings before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.",
+    sources: [
+      "fhir-report",
+      "fhir-provenance",
+      "medplum-match",
+      "patient-linkage-preprint",
+    ],
   },
   {
     path: "/annotations",
@@ -585,7 +624,7 @@ export const SECTION_GUIDES: SectionGuide[] = [
       "Person-specific history, entered connection inspector, mixed-assertion flags, selected-person CSV/JSON and reviewed full-workspace backups",
     current:
       "Working local Family Hub with profile/history CRUD, source chronology, reference/cycle gates and separate exports. Existing personal imports remain unassigned; no genetics, inheritance or disease-risk prediction is performed.",
-    next: "Evaluate explicit ownership/migration previews for personal source records before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.",
+    next: "Medical Records now has explicit attribution previews and separate person exports. Evaluate multi-person source-store isolation before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.",
     sources: ["fhir-family", "pedigreejs", "family-extraction"],
   },
   {
