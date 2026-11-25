@@ -43,6 +43,7 @@ export function LedgerTools<T extends { name: string }>({
   disabled,
   exportDisabled,
   summarize,
+  validateEntries,
 }: {
   kind: string;
   storageKey: string;
@@ -52,10 +53,32 @@ export function LedgerTools<T extends { name: string }>({
   disabled?: boolean;
   exportDisabled?: boolean;
   summarize: (entry: T) => string;
+  validateEntries?: (entries: T[]) => void;
 }) {
   const input = useRef<HTMLInputElement>(null);
+  const request = useRef(0);
   const [preview, setPreview] = useState<Ledger<T> | null>(null),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [pasted, setPasted] = useState("");
+  function reviewText(text: string) {
+    setError("");
+    setPreview(null);
+    try {
+      if (new Blob([text]).size > 30 * 1024 * 1024)
+        throw new Error("Use a backup under 30 MB.");
+      const next = parseLedger(JSON.parse(text), kind, schema);
+      validateEntries?.(next.entries);
+      setPreview(next);
+    } catch (error) {
+      setError(messageOf(error));
+    }
+  }
+  function clearReview() {
+    request.current++;
+    setPasted("");
+    setPreview(null);
+    setError("");
+  }
   return (
     <div className="no-print space-y-3">
       <div className="flex flex-wrap gap-2">
@@ -115,20 +138,60 @@ export function LedgerTools<T extends { name: string }>({
             const file = event.target.files?.[0];
             event.target.value = "";
             if (!file) return;
-            setError("");
-            setPreview(null);
+            clearReview();
+            const token = request.current;
             try {
               if (file.size > 30 * 1024 * 1024)
                 throw new Error("Use a backup under 30 MB.");
-              setPreview(
-                parseLedger(JSON.parse(await file.text()), kind, schema),
-              );
+              const text = await file.text();
+              if (token === request.current) reviewText(text);
             } catch (error) {
-              setError(messageOf(error));
+              if (token === request.current) setError(messageOf(error));
             }
           }}
         />
       </div>
+      <details>
+        <summary className="cursor-pointer text-caption text-copper-700">
+          Paste JSON backup
+        </summary>
+        <p className="text-caption text-stone-600 mt-3">
+          Paste a backup for this module when a file picker is unavailable.
+          Previewing does not change saved records. Review the contents and
+          replacement scope before confirming; JSON is processed locally.
+        </p>
+        <Field label={`Paste ${kind} backup JSON`}>
+          <textarea
+            className={`${fieldClass} min-h-32 font-mono`}
+            value={pasted}
+            maxLength={30 * 1024 * 1024}
+            spellCheck={false}
+            autoComplete="off"
+            disabled={disabled}
+            onChange={(event) => {
+              request.current++;
+              setPasted(event.target.value);
+              setPreview(null);
+              setError("");
+            }}
+          />
+        </Field>
+        <div className="flex flex-wrap gap-2 mt-3">
+          <button
+            className={actionClass}
+            disabled={disabled || !pasted.trim()}
+            onClick={() => {
+              request.current++;
+              reviewText(pasted);
+            }}
+          >
+            Preview pasted backup
+          </button>
+          <button className={actionClass} onClick={clearReview}>
+            Clear pasted JSON
+          </button>
+        </div>
+      </details>
       {error && (
         <p role="alert" className="text-caption text-rose-dark">
           {error}
@@ -160,7 +223,7 @@ export function LedgerTools<T extends { name: string }>({
               onClick={() => {
                 try {
                   onRestore(preview);
-                  setPreview(null);
+                  clearReview();
                 } catch (error) {
                   setError(messageOf(error));
                 }
@@ -168,7 +231,7 @@ export function LedgerTools<T extends { name: string }>({
             >
               Replace with reviewed backup
             </button>
-            <button className={actionClass} onClick={() => setPreview(null)}>
+            <button className={actionClass} onClick={clearReview}>
               Cancel restore
             </button>
           </div>

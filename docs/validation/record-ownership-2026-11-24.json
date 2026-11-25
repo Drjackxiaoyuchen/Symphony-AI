@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-24",
+  "product": "Symphony AI",
+  "feature": "Medical Records explicit source attribution",
+  "method": "symphony-record-ownership-v1",
+  "automated": {
+    "tests": {
+      "passed": 112,
+      "failed": 0,
+      "new_reference_cases": 13
+    },
+    "typecheck": "passed",
+    "production_build": "passed",
+    "research_docs": "generated",
+    "diff_whitespace": "passed"
+  },
+  "reference_timing": {
+    "links": 5000,
+    "current_expected": 5000,
+    "current_observed": 5000,
+    "held_observed": 0,
+    "review_ms_final_local": 129.9,
+    "interpretation": "Descriptive local Node timing only; not patient matching accuracy, browser performance or a portable benchmark."
+  },
+  "browser": {
+    "status": "blocked",
+    "reason": "Browser control timed out repeatedly before any page state could be inspected. In-app preview, inventory and alternate Chrome selection attempts failed.",
+    "desktop": "not inspected",
+    "mobile": "not inspected",
+    "screenshots": "not captured",
+    "end_to_end": "not claimed",
+    "temporary_browser_cleanup": "No tab handle returned; cleanup could not be verified. Owned local preview server stopped."
+  },
+  "visual_acceptance": "pending explicit user feedback",
+  "merge_gate": "Keep draft PR open until desktop/mobile synthetic review and screenshots are completed.",
+  "privacy": "Only synthetic fixtures and source code; no personal records, genome data, third-party uploads or model inference."
+}

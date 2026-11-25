@@ -30,6 +30,11 @@ import {
   type Medication,
 } from "./medications";
 import { familyWorkspaceSummary, type FamilyProfile } from "./family-history";
+import {
+  unassignedMedicalRecords,
+  OWNERSHIP_METHOD,
+  type RecordAssignment,
+} from "./record-ownership";
 import { RECORD_METHOD, type MedicalRecord } from "./medical-records";
 import {
   SECTION_GUIDES,
@@ -80,6 +85,7 @@ export function createReport(
     evidence?: Ledger<GenomeEvidence> | null;
     medications?: Ledger<Medication> | null;
     family?: Ledger<FamilyProfile> | null;
+    assignments?: Ledger<RecordAssignment> | null;
   },
   generatedAt = new Date().toISOString(),
 ) {
@@ -88,6 +94,15 @@ export function createReport(
     ? data.bloodwork
     : null;
   const genome = data.genome;
+  const workspaceRecords = data.records
+    ? {
+        ...data.records,
+        entries: unassignedMedicalRecords(
+          data.records.entries,
+          data.assignments?.entries || [],
+        ),
+      }
+    : null;
   const analyzeMeal = createMealContextAnalyzer(cgm?.readings || []);
   return {
     schemaVersion: REPORT_VERSION,
@@ -185,14 +200,24 @@ export function createReport(
             "Only completed sessions enter activity totals. External-load volume is reps × external load in kg; bodyweight mass is not inferred. No calorie-burn or readiness estimate.",
         }
       : null,
-    medicalRecords: data.records
+    medicalRecords: workspaceRecords
       ? {
-          ...data.records,
+          ...workspaceRecords,
+          scope:
+            "Unassigned legacy-workspace sources only. Every record with an attribution entry is withheld, including stale links; export person-attributed medical records separately.",
           method: RECORD_METHOD,
           limitations:
             "User-entered metadata and a supported FHIR R4 projection. Original files, narrative conclusions and attachments are not stored. No diagnosis, unit conversion, range classification, or extraction model is applied. Checked status means user source review, not clinical validation.",
         }
       : null,
+    medicalRecordOwnership: {
+      method: OWNERSHIP_METHOD,
+      withheldSourceRecords:
+        (data.records?.entries.length || 0) -
+        (workspaceRecords?.entries.length || 0),
+      scope:
+        "Counts only. Attribution identities, basis notes and person-assigned source records are excluded from this default report.",
+    },
     familyWorkspace: familyWorkspaceSummary(data.family),
     medications: data.medications
       ? {

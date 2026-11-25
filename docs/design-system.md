@@ -36,4 +36,8 @@ Use copper for interactive emphasis and continuous audit scales. Muted sage/rose
 
 2026-11-23: Family Hub uses the same scheme for person selection, source assertions, separate relationship types, inspection flags and scoped export controls. No global theme token changed. Profiles are data containers, not access-control boundaries. UI acceptance remains pending.
 
-Next: collect visual feedback and continue the same scheme in explicit Medical Records ownership review. Keep scientific validation independent from visual acceptance.
+2026-11-24 proposal: Medical Records attribution reuses the existing cards, fields, copper controls, paired source/person contexts, neutral change flags and responsive grids. No global theme token changed. Automated checks pass; browser control timed out repeatedly before desktop/mobile inspection. Screenshots and browser validation remain pending, so the proposal is retained in a pull request. User visual acceptance remains pending.
+
+2026-11-25: Completed attribution desktop/mobile review using invented records. Compact three-column mobile counters, paired review context and pasted-JSON backup preview use the same tokens and controls. Confirmation clears stale revoke/undo feedback. Screenshots are published for review; user visual acceptance is still pending.
+
+Next: collect visual feedback and continue the same scheme in person-scoped source-store work. Keep scientific validation independent from visual acceptance.

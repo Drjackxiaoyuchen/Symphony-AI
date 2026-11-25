@@ -27,6 +27,10 @@ import {
   validateFamilyProfiles,
 } from "@/lib/family-history";
 import { medicationSchema, validateMedicationSet } from "@/lib/medications";
+import {
+  recordAssignmentSchema,
+  validateAssignmentSet,
+} from "@/lib/record-ownership";
 import { medicalRecordSchema, validateRecordSet } from "@/lib/medical-records";
 import {
   supplementSchema,
@@ -63,6 +67,12 @@ export default function ReportsPage() {
     familyProfileSchema,
     validateFamilyProfiles,
   );
+  const assignments = useLedger(
+    KEYS.ownership,
+    "record-ownership",
+    recordAssignmentSchema,
+    validateAssignmentSet,
+  );
   const supplements = useLedger(
       KEYS.supplements,
       "supplements",
@@ -79,10 +89,14 @@ export default function ReportsPage() {
       supplements: supplements.stored,
       meals: meals.stored,
       workouts: workouts.stored,
-      records: records.error ? null : records.stored,
+      records:
+        records.error || !assignments.ready || assignments.error
+          ? null
+          : records.stored,
       evidence: evidence.error ? null : evidence.stored,
       medications: medications.error ? null : medications.stored,
       family: family.error ? null : family.stored,
+      assignments: assignments.error ? null : assignments.stored,
     },
     generatedAt,
   );
@@ -117,6 +131,8 @@ export default function ReportsPage() {
           <button
             className={`${button} !bg-copper !text-white`}
             disabled={
+              !assignments.ready ||
+              !!assignments.error ||
               !records.ready ||
               !!records.error ||
               !evidence.ready ||
@@ -395,15 +411,18 @@ export default function ReportsPage() {
           restoration. Missing records are not filled with examples.
         </p>
         <div className="mt-5 pt-4 border-t border-cream-300 text-caption text-stone-600">
-          <strong>Medical records</strong>
+          <strong>Unattributed medical source records</strong>
           <p>
             {report.medicalRecords?.entries.length || 0} saved source records ·{" "}
             {report.medicalRecords?.entries.reduce(
               (n, r) => n + r.observations.length,
               0,
             ) || 0}{" "}
-            linked observations. Included in the full JSON; original documents
-            are not stored.
+            linked observations.{" "}
+            {report.medicalRecordOwnership.withheldSourceRecords} source records
+            with attribution entries are withheld, including stale links.
+            Person-attributed records have separate exports in Medical Records;
+            original documents are not stored.
           </p>
           <Link href="/records" className="text-copper-700 underline no-print">
             Open medical records
@@ -448,6 +467,7 @@ export default function ReportsPage() {
           </Link>
         </div>
         {[
+          assignments.error,
           family.error,
           medications.error,
           supplements.error,

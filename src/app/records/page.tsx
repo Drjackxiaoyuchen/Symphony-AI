@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import RecordOwnership from "@/components/record-ownership";
 import { Download, FileText, Plus, Search, Upload } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { SectionTitle } from "@/components/ui/section-title";
@@ -222,6 +223,7 @@ export default function RecordsPage() {
           not clinical validation.
         </p>
       </Card>
+      <RecordOwnership />
       {(error || records.error) && (
         <Card>
           <p role="alert" className="text-caption text-rose-dark">
@@ -533,7 +535,7 @@ export default function RecordsPage() {
                 )
               }
             >
-              <Download size={14} /> Export index CSV
+              <Download size={14} /> Export all-record index CSV
             </button>
           }
         />
@@ -674,7 +676,7 @@ export default function RecordsPage() {
       <Card>
         <SectionTitle
           title="Keep a portable copy"
-          subtitle="JSON retains observations and provenance; the index CSV contains record metadata only"
+          subtitle="All-record backup: JSON retains every source and observation projection; CSV contains all source metadata. Attribution entries have a separate backup above."
         />
         <LedgerTools
           kind="medical-records"
