@@ -1,5 +1,5 @@
 // Reviewed public references. These are design/method references, not live integrations.
-export const RESEARCH_DATE = "2026-11-24";
+export const RESEARCH_DATE = "2026-11-25";
 export type ResearchSource = {
   id: string;
   title: string;
@@ -15,29 +15,29 @@ export const RESEARCH_SOURCES: ResearchSource[] = [
     title: "FHIR R4 Provenance: source and attribution boundaries",
     kind: "Documentation",
     url: "https://hl7.org/fhir/R4/provenance.html",
-    reviewedAt: "2026-11-24",
+    reviewedAt: "2026-11-25",
     learning:
       "Keep the original subject/source separate from the activity and basis that attribute a record to a local person.",
     boundary:
-      "R4 4.0.1 documentation (CC0), accessed 2026-11-24. Our versioned local attribution is not a conformant FHIR Provenance resource, authenticated identity, consent or an immutable audit log. No specification text or code copied.",
+      "R4 4.0.1 documentation (CC0), accessed 2026-11-24 and rechecked 2026-11-25. Our versioned local attribution is not a conformant FHIR Provenance resource, authenticated identity, consent or an immutable audit log. No specification text or code copied.",
   },
   {
     id: "medplum-match",
     title: "Medplum Patient $match: ambiguity and disclosure gates",
     kind: "Documentation",
     url: "https://www.medplum.com/docs/api/fhir/operations/patient-match",
-    reviewedAt: "2026-11-24",
+    reviewedAt: "2026-11-25",
     learning:
       "Candidate ranking and permission to disclose are different decisions; ambiguous identity must not silently become an accepted link.",
     boundary:
-      "Live documentation accessed 2026-11-24 references a draft matching guide. Repository/license inspected at 1f2c185cb97e93b4f1decbf19a19ea41ab39e8d0, Apache-2.0; documentation not pinned to that commit. No matching service/code integrated. Symphony uses explicit review, not matching scores or access control.",
+      "Live documentation accessed 2026-11-24 and rechecked 2026-11-25 references a draft matching guide. Repository/license inspected at 1f2c185cb97e93b4f1decbf19a19ea41ab39e8d0, Apache-2.0; documentation not pinned to that commit. No matching service/code integrated. Symphony uses explicit review, not matching scores or access control.",
   },
   {
     id: "patient-linkage-preprint",
     title: "Language models for patient record linkage: evaluation limits",
     kind: "Paper",
     url: "https://arxiv.org/abs/2504.15261v1",
-    reviewedAt: "2026-11-24",
+    reviewedAt: "2026-11-25",
     learning:
       "Evaluate identity errors and candidate-retrieval loss separately on domain-specific labeled records before adopting automation.",
     boundary:
@@ -466,7 +466,7 @@ export const SECTION_GUIDES: SectionGuide[] = [
       "Date-selectable trace, interactive hourly coverage audit, missing-duration TIR bounds, exploratory hourly profile and CSV/JSON reports",
     current:
       "Local duration-weighted metrics, missing-calendar-day/hour audit including DST, algebraic TIR sensitivity bounds and reproducible hourly exports. Personal meal summaries retain observation quality gates.",
-    next: "Add user-confirmed sensor cadence and report time zone, then reference-validation against an independent CGM package. Medical Records now has a local register; Genome Tracker is the next unfinished personal-data module.",
+    next: "Add user-confirmed sensor cadence and report time zone, then reference-validation against an independent CGM package. Medical Records, Genome Tracker, Medicine Checker and Family Hub now have local source workflows; remaining clinical interpretations stay unimplemented.",
     sources: [
       "nightscout",
       "iglu",
@@ -624,7 +624,7 @@ export const SECTION_GUIDES: SectionGuide[] = [
       "Person-specific history, entered connection inspector, mixed-assertion flags, selected-person CSV/JSON and reviewed full-workspace backups",
     current:
       "Working local Family Hub with profile/history CRUD, source chronology, reference/cycle gates and separate exports. Existing personal imports remain unassigned; no genetics, inheritance or disease-risk prediction is performed.",
-    next: "Medical Records now has explicit attribution previews and separate person exports. Evaluate multi-person source-store isolation before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.",
+    next: "Medical Records now has explicit attribution previews, reviewed file/paste backups and separate person exports. Evaluate multi-person source-store isolation before extending profile scope; Offspring Risk remains a demo until verified parental haplotypes and a validated clinical endpoint are available.",
     sources: ["fhir-family", "pedigreejs", "family-extraction"],
   },
   {

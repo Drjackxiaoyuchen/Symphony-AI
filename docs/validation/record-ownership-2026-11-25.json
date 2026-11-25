@@ -1,0 +1,167 @@
+{
+  "date": "2026-11-25",
+  "origin": "disposable localhost origin",
+  "syntheticOnly": true,
+  "checks": [
+    {
+      "name": "No automatic attribution after manual source/profile creation",
+      "passed": true,
+      "observed": {
+        "records": 2,
+        "unassigned": 2,
+        "current": 0,
+        "held": 0
+      }
+    },
+    {
+      "name": "Preview does not persist and acknowledgement gates save",
+      "passed": true
+    },
+    {
+      "name": "Confirmed attribution and selected-person export",
+      "passed": true,
+      "observed": {
+        "unassigned": 1,
+        "current": 1,
+        "held": 0,
+        "exportedRecordNames": ["SYNTHETIC visit A — source review"],
+        "person": "Synthetic Rowan"
+      },
+      "evidence": "Downloaded JSON inspected separately; Chrome download event waiter timed out but file was saved."
+    },
+    {
+      "name": "Attribution backup retains one source and identity fingerprint",
+      "passed": true
+    },
+    {
+      "name": "Malformed pasted JSON blocks preview",
+      "passed": true
+    },
+    {
+      "name": "Wrong module blocks preview",
+      "passed": true,
+      "message": "kind: Invalid literal value, expected \"record-ownership\""
+    },
+    {
+      "name": "Duplicate IDs block preview",
+      "passed": true,
+      "message": "entries: Duplicate record IDs in backup."
+    },
+    {
+      "name": "Conflicting subject attribution blocks preview",
+      "passed": true,
+      "message": "The same exact source Patient reference cannot be assigned to different people. Review or revoke conflicting entries first; names are not used to resolve identity."
+    },
+    {
+      "name": "Changed record is held from selected-person JSON",
+      "passed": true
+    },
+    {
+      "name": "Editing pasted JSON invalidates its review",
+      "passed": true
+    },
+    {
+      "name": "Cancel restoration clears pasted JSON and preview",
+      "passed": true
+    },
+    {
+      "name": "Restoring an old reviewed attribution does not refresh fingerprints",
+      "passed": true
+    },
+    {
+      "name": "Source change during preview blocks confirmation",
+      "passed": true
+    },
+    {
+      "name": "Default JSON report excludes held attributed source and family identity",
+      "passed": true
+    },
+    {
+      "name": "Revocation and undo preserve the original source and restore the link",
+      "passed": true,
+      "observed": {
+        "afterRevoke": {
+          "unassigned": 2,
+          "current": 0,
+          "held": 0
+        },
+        "afterUndo": {
+          "unassigned": 1,
+          "current": 1,
+          "held": 0
+        },
+        "sourceRecords": 2
+      }
+    },
+    {
+      "name": "Cross-view undo refuses to overwrite a new attribution",
+      "passed": true,
+      "message": "A new attribution already exists. Review it rather than overwriting it with undo."
+    },
+    {
+      "name": "Person identity edit holds the attribution",
+      "passed": true
+    },
+    {
+      "name": "New confirmation clears stale revocation banner",
+      "passed": true
+    },
+    {
+      "name": "Desktop layout inspected at 1280 by 900",
+      "passed": true,
+      "screenshot": "docs/screenshots/symphony-record-ownership-2026-11-25.jpg"
+    },
+    {
+      "name": "Mobile layout inspected at 390 by 844",
+      "passed": true,
+      "observed": {
+        "allControlsInWidth": true,
+        "columns": "95.6641px 95.6641px 95.6641px",
+        "documentWidth": 385,
+        "viewport": 390
+      },
+      "screenshot": "docs/screenshots/symphony-record-ownership-mobile-2026-11-25.jpg"
+    },
+    {
+      "name": "Keyboard moves between labeled attribution fields with a focus indicator",
+      "passed": true,
+      "observed": {
+        "focusRing": "rgba(184, 144, 111, 0.1) 0px 0px 0px 3px",
+        "label": "Person for attribution / exportChoose a Family Hub",
+        "tag": "SELECT"
+      }
+    }
+  ],
+  "product": "Symphony AI",
+  "method": "symphony-record-ownership-v1",
+  "automated": {
+    "tests": {
+      "passed": 112,
+      "failed": 0,
+      "newReferenceCasesFromOriginalFeature": 13
+    },
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "researchDocs": "generated",
+    "referenceTiming": {
+      "links": 5000,
+      "current": 5000,
+      "held": 0,
+      "milliseconds": 183.5,
+      "scope": "Local descriptive Node timing; not browser performance or identity accuracy."
+    }
+  },
+  "browser": {
+    "engine": "Chrome extension",
+    "desktop": [1280, 900],
+    "mobileViewport": [390, 844],
+    "errors": 0,
+    "filePicker": "Not tested successfully: extension file URL access unavailable; no permission changed.",
+    "restoration": "Pasted JSON route tested end to end, including invalid input, review, cancel and replacement.",
+    "downloads": "Actual current-person, held-person, attribution-backup and default-report JSON inspected. A Chrome download event waiter timed out; the saved files were verified separately.",
+    "limitation": "Responsive viewport inspection, not physical mobile-device testing."
+  },
+  "visualAcceptance": "Pending explicit user feedback",
+  "scientificScope": "Deterministic local attribution and export contracts; no patient identity accuracy, clinical inference, remote model inference or private health/genome upload.",
+  "cleanup": "Owned tabs closed, temporary viewport reset; local preview server stopped after browser checks."
+}

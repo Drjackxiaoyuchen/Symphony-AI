@@ -129,7 +129,7 @@ export default function RecordOwnership() {
           title="Review who a record belongs to"
           subtitle="Explicit source attribution to a Family Hub person. Legacy records stay unassigned until you confirm."
         />
-        <div className="grid sm:grid-cols-3 gap-3 mb-5">
+        <div className="grid !grid-cols-3 gap-2 sm:gap-3 mb-5">
           {[
             { label: "Unassigned source records", n: audit?.unassignedRecords },
             { label: "Current reviewed links", n: audit?.current },
@@ -347,6 +347,7 @@ export default function RecordOwnership() {
                       ...preview.assignment,
                       reviewedAt: new Date().toISOString(),
                     });
+                    setRemoved(null);
                     setPreview(null);
                     setConfirmed(false);
                     setNotice(
@@ -399,6 +400,7 @@ export default function RecordOwnership() {
                     );
                   owners.save(removed);
                   setRemoved(null);
+                  setError("");
                 } catch (e) {
                   setError(messageOf(e));
                 }
@@ -460,6 +462,7 @@ export default function RecordOwnership() {
                             );
                           setRemoved(owners.remove(r.recordId) || null);
                           setPreview(null);
+                          setError("");
                           setNotice("");
                         } catch (e) {
                           setError(messageOf(e));
@@ -561,6 +564,7 @@ export default function RecordOwnership() {
               kind="record-ownership"
               storageKey={KEYS.ownership}
               schema={recordAssignmentSchema}
+              validateEntries={validateAssignmentSet}
               stored={owners.stored}
               disabled={!owners.ready}
               exportDisabled={!!owners.error}
