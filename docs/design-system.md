@@ -41,3 +41,5 @@ Use copper for interactive emphasis and continuous audit scales. Muted sage/rose
 2026-11-25: Completed attribution desktop/mobile review using invented records. Compact three-column mobile counters, paired review context and pasted-JSON backup preview use the same tokens and controls. Confirmation clears stale revoke/undo feedback. Screenshots are published for review; user visual acceptance is still pending.
 
 Next: collect visual feedback and continue the same scheme in person-scoped source-store work. Keep scientific validation independent from visual acceptance.
+
+2026-11-26: The reference audit extends the same typography, neutral source context, copper disclosures and review controls. Long target URIs wrap in a named, keyboard-focusable table with bounded internal scrolling. Pasted FHIR input follows the existing backup-preview pattern. Desktop/mobile screenshots are proposals; user visual acceptance remains pending.

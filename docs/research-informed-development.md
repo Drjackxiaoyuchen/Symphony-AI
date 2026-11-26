@@ -1,6 +1,6 @@
 # Symphony AI: research-informed development
 
-Library updated: **2026-11-25**. Individual source review dates are retained below.
+Library updated: **2026-11-26**. Individual source review dates are retained below.
 
 This pass reviews all 18 original sections. It adopts interface and data-quality patterns while keeping unimplemented integrations and clinical interpretation explicitly separate from imported observations. The catalog behind the app and this document is `src/data/research.ts`; regenerate this document with `npm run docs:research`.
 
@@ -29,6 +29,8 @@ This pass reviews all 18 original sections. It adopts interface and data-quality
 - 2026-11-24: Medical Records now has explicit source-to-person attribution previews, source/person fingerprint compatibility gates, reviewed attribution backups and scoped person exports. Any attributed source is withheld from the default personal report, including stale links. See [method and validation scope](methods/record-ownership-v1.md).
 
 - 2026-11-25: Completed Medical Records attribution browser review; added local pasted-JSON backup previews with explicit replacement, attribution-domain validation before preview, stale-preview clearing and compact mobile counters. The existing visual scheme remains a proposal for user review. See [validation evidence](validation/record-ownership-2026-11-25.json).
+
+- 2026-11-26: Added namespace-aware offline FHIR reference resolution, strict in-Bundle Patient/Observation targets, a preserved reference audit, local pasted-Bundle previews and legacy audit-absent labeling. See [method and compatibility boundary](methods/fhir-references-v1.md).
 
 ## Evidence and implementation boundaries
 
@@ -156,9 +158,9 @@ Route: `/records`.
 
 **Current:** Working source register plus reviewed record-to-person attribution previews, fingerprint change gates and separate person exports. Legacy records stay unassigned; every attributed record is withheld from the default report, including stale links. Attribution does not authenticate identity.
 
-**Next:** Evaluate multi-person source-store isolation and explicit source identity/namespace mappings before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.
+**Next:** Namespace-aware in-Bundle resolution and a saved link audit are implemented. Next isolate source stores by person and define cross-import identifier namespaces before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.
 
-**References:** [FHIR R4 Provenance: source and attribution boundaries](https://hl7.org/fhir/R4/provenance.html), [Medplum Patient $match: ambiguity and disclosure gates](https://www.medplum.com/docs/api/fhir/operations/patient-match), [Language models for patient record linkage: evaluation limits](https://arxiv.org/abs/2504.15261v1), [HL7 FHIR R4 DiagnosticReport and Observation](https://hl7.org/fhir/R4/diagnosticreport.html).
+**References:** [FHIR R4 Bundle reference resolution](https://hl7.org/fhir/R4/bundle.html#references), [Synthea source-linked synthetic FHIR output](https://github.com/synthetichealth/synthea/tree/0857400eacbbecc5a67c7d05740efa227d22db39), [FHIR R4 Provenance: source and attribution boundaries](https://hl7.org/fhir/R4/provenance.html), [Medplum Patient $match: ambiguity and disclosure gates](https://www.medplum.com/docs/api/fhir/operations/patient-match), [Language models for patient record linkage: evaluation limits](https://arxiv.org/abs/2504.15261v1), [HL7 FHIR R4 DiagnosticReport and Observation](https://hl7.org/fhir/R4/diagnosticreport.html).
 
 ### Genome Tracker
 
@@ -337,6 +339,22 @@ Route: `/import`.
 **References:** [Open mHealth schemas](https://github.com/openmhealth/schemas), [apriha/snps](https://github.com/apriha/snps), [Medplum results and review](https://www.medplum.com/docs/labs-imaging/results-and-review), [MedGemma 1.5 4B model card](https://huggingface.co/google/medgemma-1.5-4b-it).
 
 ## Source register
+
+### FHIR R4 Bundle reference resolution
+
+[Documentation](https://hl7.org/fhir/R4/bundle.html#references) · reviewed 2026-11-26.
+
+Pattern: Resolve relative type/id references against the referring resource's RESTful fullUrl base; require exact in-Bundle targets and consistent declared types.
+
+Boundary: R4 4.0.1, CC0 specification; references.html and Bundle resolution rules reviewed. Our offline subset rejects unsupported references and never fetches external URLs. A resolved link does not authenticate patient identity or provide general FHIR conformance.
+
+### Synthea source-linked synthetic FHIR output
+
+[Repository](https://github.com/synthetichealth/synthea/tree/0857400eacbbecc5a67c7d05740efa227d22db39) · reviewed 2026-11-26.
+
+Pattern: Keep synthetic fixtures distinct from patient evidence and link generated resources through explicit fullUrl references.
+
+Boundary: Pinned README, Apache-2.0 LICENSE and FhirR4.java reference construction reviewed. No code, generated patient corpus or model was copied or run. Our small fixtures and reference-case results are local contract validation, not a reproduction of Synthea or clinical realism.
 
 ### FHIR R4 Provenance: source and attribution boundaries
 
@@ -629,7 +647,7 @@ Boundary: Our fixed-window observed summaries and quality gates are an explorato
 ## Next development sequence
 
 1. Collect user feedback on the proposed UI baseline and refine the same theme; visual acceptance remains pending.
-2. Validate multi-person source-store isolation and explicit source namespaces before expanding FHIR imports. Medical Records attribution, reviewed file/paste restoration and scoped outputs are implemented; legacy records and all other personal imports remain unassigned unless explicitly attributed.
+2. Namespace-aware in-Bundle reference resolution is implemented. Validate person-scoped source-store isolation and cross-import identifier namespaces before expanding multi-person FHIR imports. Medical Records attribution, reviewed file/paste restoration and scoped outputs are implemented; legacy records and all other personal imports remain unassigned unless explicitly attributed.
 3. Add user-confirmed CGM cadence/time zone and independent package reference comparisons, then reviewed analyte mappings and unit conversions preserving original values.
 4. Evaluate explicit person-scoped source-document review and extraction on de-identified field-level references before sharing or family analyses. Offspring Risk/Family Comparison require verified input identity, genotype/haplotype coverage and a validated endpoint before conversion.
 5. Validate a pinned ClinVar release adapter with merged accession, condition-alias and reference-allele checks; then evaluate external pipeline reports with explicit build, allele and cohort context.

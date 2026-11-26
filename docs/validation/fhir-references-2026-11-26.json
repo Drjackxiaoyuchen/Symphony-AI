@@ -1,0 +1,116 @@
+{
+  "date": "2026-11-26",
+  "syntheticOnly": true,
+  "checks": [
+    {
+      "name": "Valid synthetic preview resolves seven links and requires acknowledgement",
+      "passed": true
+    },
+    {
+      "name": "Audit exposes original reference, referring source, resolved target and mode",
+      "passed": true
+    },
+    {
+      "name": "Cross-server same-ID cannot satisfy a relative subject",
+      "passed": true,
+      "message": "Unresolved Patient reference: Patient/synthetic-person (target https://other.example/fhir/Patient/synthetic-person). No network request was made."
+    },
+    {
+      "name": "Missing source base is not guessed",
+      "passed": true,
+      "message": "Relative reference Patient/synthetic-person has no RESTful source fullUrl. Supply explicit absolute references/fullUrls; a service base will not be guessed."
+    },
+    {
+      "name": "Conflicting Reference.type is rejected",
+      "passed": true,
+      "message": "Reference.type disagrees with resolved Patient at subject."
+    },
+    {
+      "name": "Missing in-Bundle Patient is blocked",
+      "passed": true,
+      "message": "Unresolved Patient reference: Patient/synthetic-person (target https://synthetic.example/fhir/Patient/synthetic-person). No network request was made."
+    },
+    {
+      "name": "Duplicate fullUrl is blocked",
+      "passed": true,
+      "message": "Ambiguous duplicate resource identity: https://synthetic.example/fhir/Patient/synthetic-person"
+    },
+    {
+      "name": "Discard clears the pasted input and preview without saving",
+      "passed": true
+    },
+    {
+      "name": "Editing FHIR text invalidates the reviewed preview",
+      "passed": true
+    },
+    {
+      "name": "Saved JSON retains audit, independent UTF-8 hash, zero, inequality, absence and offset",
+      "passed": true
+    },
+    {
+      "name": "Legacy restore stays readable without an invented reference audit",
+      "passed": true
+    },
+    {
+      "name": "Reviewed backup restoration preserves the captured audit",
+      "passed": true
+    },
+    {
+      "name": "Final desktop audit fits the page and has bounded scrolling",
+      "passed": true
+    },
+    {
+      "name": "CSV export appends method and all seven audit links",
+      "passed": true,
+      "observed": {
+        "quotedHeaders": true,
+        "links": 7
+      }
+    },
+    {
+      "name": "Personal JSON report retains the full new audit",
+      "passed": true
+    },
+    {
+      "name": "Final mobile layout keeps the page contained and section headings readable",
+      "passed": true,
+      "observed": {
+        "documentWidth": 385,
+        "headingWidth": 303,
+        "regionWidth": 230,
+        "tableWidth": 720,
+        "viewport": 390
+      }
+    }
+  ],
+  "method": "symphony-fhir-references-v1",
+  "product": "Symphony AI",
+  "automated": {
+    "tests": {
+      "passed": 124,
+      "failed": 0,
+      "newCases": 12
+    },
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "researchDocs": "generated",
+    "largeReferenceCase": {
+      "observations": 1000,
+      "resolvedLinks": 2001,
+      "valuesPreserved": true,
+      "scope": "Coverage/correctness case, not patient-match accuracy or a clinical benchmark."
+    }
+  },
+  "browser": {
+    "engine": "in-app browser",
+    "desktop": [1280, 900],
+    "mobileViewport": [390, 844],
+    "consoleErrors": 0,
+    "inputs": "Only synthetic Bundle text and reviewed synthetic backups.",
+    "exports": "Actual JSON backup, personal JSON and CSV downloads inspected.",
+    "limitation": "Responsive viewport inspection; no physical mobile device or file-picker test. Pasted-input path tested."
+  },
+  "visualAcceptance": "Pending explicit user feedback",
+  "scope": "Offline literal-reference audit; no remote matching, model inference, clinical identity verification, source-store migration or private health/genome upload.",
+  "cleanup": "Owned tab closed; temporary viewport reset; preview server stopped after browser review."
+}

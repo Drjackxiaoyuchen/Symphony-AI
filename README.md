@@ -8,7 +8,15 @@ Personal measurements and illustrative results have distinct labels. The daily-r
 
 ![Symphony AI glucose workspace — proposed UI with synthetic data](docs/screenshots/symphony-glucose-overview-2026-11-19.jpg)
 
-## Latest revision for UI review — 2026-11-25
+## Latest revision for UI review — 2026-11-26
+
+**Medical Records now audits the identity of imported links.** Relative references resolve against the referring resource's server base; a matching short ID on another server cannot satisfy the link. Missing targets, contradictory types and unsupported references block the import. A local pasted-Bundle preview shows each original reference, source context and resolved target before acknowledgement and save. JSON/CSV exports retain the audit and method.
+
+![Reference audit — proposed Symphony AI UI using synthetic source data](docs/screenshots/symphony-fhir-reference-audit-2026-11-26.jpg)
+
+See [method, sources and validation](docs/methods/fhir-references-v1.md) and [mobile preview](docs/screenshots/symphony-fhir-reference-audit-mobile-2026-11-26.jpg). In a disposable local workspace, use **Medical Records → Paste a FHIR Bundle** with [the synthetic example](docs/examples/medical-report-synthetic.fhir.json). Legacy saved records retain their facts and attribution fingerprints and show when an audit was not captured. This is an offline supported subset; clinical identity verification and broader multi-person source storage remain outside this change. **UI acceptance remains with the user.**
+
+## Attribution revision — 2026-11-25
 
 **Medical Records now supports reviewed attribution to a Family Hub person.** Choose a source and person, inspect both contexts, enter the evidence you checked, then preview and confirm. A separate ledger retains the review basis, time and source/person fingerprints. Changed or missing sources/profiles hold the link for re-review. Person-specific JSON includes current links only; all attributed source records are withheld from the default personal report, including stale links. The original source records are retained.
 
@@ -140,7 +148,7 @@ The full personal report is now `symphony-report-v2` and includes these ledgers,
 
 ## Research-informed development
 
-The [Research Library](http://localhost:3000/research) maps 36 public references to all 18 original sections. [Development notes](docs/research-informed-development.md) record the adopted patterns, remaining work and evidence boundaries. References include Nightscout, iglu, Open mHealth, Open Food Facts, wger, Medplum, ClinVar, GWAS Catalog, PGS Catalog Calculator, PharmCAT, CPIC, a Hugging Face MedGemma model card and Function's public product announcement.
+The [Research Library](http://localhost:3000/research) maps 38 public references to all 18 original sections. [Development notes](docs/research-informed-development.md) record the adopted patterns, remaining work and evidence boundaries. References include Nightscout, iglu, Open mHealth, Open Food Facts, wger, Medplum, ClinVar, GWAS Catalog, PGS Catalog Calculator, PharmCAT, CPIC, a Hugging Face MedGemma model card and Function's public product announcement.
 
 Sources inform design and method choices; their code, models, databases and proprietary algorithms are not installed or reproduced. Links open source websites without attaching uploaded datasets. The initial references were reviewed on **2026-11-16**, with glucose-audit references added on **2026-11-19** and Medical Records references reviewed on **2026-11-20**, and Genome Tracker sources reviewed on **2026-11-21**. Medication source/validation references were reviewed on **2026-11-22**; Family Hub sources were reviewed on **2026-11-23** and attribution sources on **2026-11-24**, rechecked **2026-11-25**; individual review dates are retained. A separate local Codex task is scheduled daily at 09:00 Asia/Shanghai for incremental research and implementation; normal app sessions do not refresh evidence in the background.
 

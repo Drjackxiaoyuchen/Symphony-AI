@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import RecordOwnership from "@/components/record-ownership";
+import { ReferenceAudit } from "@/components/reference-audit";
 import { Download, FileText, Plus, Search, Upload } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { SectionTitle } from "@/components/ui/section-title";
@@ -138,10 +139,58 @@ export default function RecordsPage() {
     [confirmed, setConfirmed] = useState(false),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
+    [pasted, setPasted] = useState(""),
+    [importError, setImportError] = useState(""),
     [query, setQuery] = useState(""),
     [kind, setKind] = useState("All types"),
     [removed, setRemoved] = useState<MedicalRecord | null>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null),
+    importRequest = useRef(0);
+  function discardImport() {
+    importRequest.current++;
+    setPreview(null);
+    setConfirmed(false);
+    setImportError("");
+    setPasted("");
+    setBusy(false);
+  }
+  async function previewBytes(
+    bytes: Uint8Array,
+    filename: string,
+    token: number,
+    pastedInput = false,
+  ) {
+    try {
+      if (bytes.byteLength > 10 * 1024 * 1024)
+        throw new Error("Use JSON under 10 MiB.");
+      const digest = await crypto.subtle.digest(
+        "SHA-256",
+        new Uint8Array(bytes).buffer,
+      );
+      const sha256 = Array.from(new Uint8Array(digest), (b) =>
+        b.toString(16).padStart(2, "0"),
+      ).join("");
+      const next = parseFhirReport(
+        JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)),
+        {
+          id: crypto.randomUUID(),
+          filename,
+          sha256,
+          importedAt: new Date().toISOString(),
+        },
+      );
+      if (pastedInput)
+        next.warnings.push(
+          "Source hash covers UTF-8 pasted text; it may differ from the original file bytes. Keep the original source.",
+        );
+      validateRecordSet([...records.entries, next]);
+      if (token === importRequest.current) setPreview(next);
+    } catch (err) {
+      if (token === importRequest.current) setImportError(messageOf(err));
+    } finally {
+      if (token === importRequest.current) setBusy(false);
+    }
+  }
   const disabled = !records.ready || !!records.error;
   const visible = records.entries
     .filter(
@@ -161,7 +210,7 @@ export default function RecordsPage() {
     try {
       records.save(record);
       setForm(null);
-      setPreview(null);
+      discardImport();
       setError("");
     } catch (e) {
       setError(messageOf(e));
@@ -257,6 +306,7 @@ export default function RecordsPage() {
         <Card>
           <SectionTitle
             icon={FileText}
+            stackOnMobile
             title={form.id ? "Edit record metadata" : "Add a source record"}
             subtitle="Unknown dates and providers can remain blank"
           />
@@ -401,6 +451,7 @@ export default function RecordsPage() {
       <Card>
         <SectionTitle
           icon={Upload}
+          stackOnMobile
           title="Bring a structured report"
           subtitle="FHIR R4 subset · one DiagnosticReport and its linked flat numeric or absent observations"
           action={
@@ -416,9 +467,9 @@ export default function RecordsPage() {
         />
         <p className="text-caption text-stone-600">
           A local JSON Bundle is checked before anything is saved. Review the
-          patient reference, statuses, exact values and units. References must
-          resolve inside the file; the app makes no network requests and does
-          not merge this report into Blood Work.
+          patient reference, statuses, exact values, units and reference
+          identity audit. References must resolve inside the file; the app makes
+          no network requests and does not merge this report into Blood Work.
         </p>
         <p className="text-micro text-stone-500 mt-3">
           PDFs, images, OCR and general FHIR validation are not supported.
@@ -436,36 +487,81 @@ export default function RecordsPage() {
             const file = e.target.files?.[0];
             e.target.value = "";
             if (!file) return;
-            setPreview(null);
-            setConfirmed(false);
-            setError("");
+            discardImport();
+            const token = importRequest.current;
             setBusy(true);
             try {
               if (file.size > 10 * 1024 * 1024)
-                throw new Error("Use a JSON file under 10 MB.");
-              const bytes = await file.arrayBuffer();
-              const digest = await crypto.subtle.digest("SHA-256", bytes);
-              const sha256 = Array.from(new Uint8Array(digest), (b) =>
-                b.toString(16).padStart(2, "0"),
-              ).join("");
-              const next = parseFhirReport(
-                JSON.parse(new TextDecoder().decode(bytes)),
-                {
-                  id: crypto.randomUUID(),
-                  filename: file.name,
-                  sha256,
-                  importedAt: new Date().toISOString(),
-                },
-              );
-              validateRecordSet([...records.entries, next]);
-              setPreview(next);
+                throw new Error("Use JSON under 10 MiB.");
+              const bytes = new Uint8Array(await file.arrayBuffer());
+              if (token === importRequest.current)
+                await previewBytes(bytes, file.name, token);
             } catch (err) {
-              setError(messageOf(err));
-            } finally {
-              setBusy(false);
+              if (token === importRequest.current) {
+                setImportError(messageOf(err));
+                setBusy(false);
+              }
             }
           }}
         />
+        <details className="mt-4">
+          <summary className="cursor-pointer text-caption text-copper-700">
+            Paste a FHIR Bundle
+          </summary>
+          <p className="text-caption text-stone-600 mt-3">
+            Paste original source JSON for a local preview. The source hash
+            covers the UTF-8 text entered here, saved as pasted-fhir.json; it
+            may differ from the original file. Previewing does not save a
+            record.
+          </p>
+          <Field label="FHIR Bundle JSON">
+            <textarea
+              className={`${fieldClass} min-h-40 font-mono`}
+              value={pasted}
+              maxLength={10 * 1024 * 1024}
+              spellCheck={false}
+              autoComplete="off"
+              disabled={disabled}
+              onChange={(e) => {
+                importRequest.current++;
+                setPasted(e.target.value);
+                setPreview(null);
+                setConfirmed(false);
+                setImportError("");
+                setBusy(false);
+              }}
+            />
+          </Field>
+          <div className="flex flex-wrap gap-2 mt-3">
+            <button
+              className={actionClass}
+              disabled={disabled || busy || !pasted.trim()}
+              onClick={() => {
+                const token = ++importRequest.current;
+                setPreview(null);
+                setConfirmed(false);
+                setImportError("");
+                setBusy(true);
+                void previewBytes(
+                  new TextEncoder().encode(pasted),
+                  "pasted-fhir.json",
+                  token,
+                  true,
+                );
+              }}
+            >
+              Preview pasted FHIR report
+            </button>
+            <button className={actionClass} onClick={discardImport}>
+              Clear FHIR input
+            </button>
+          </div>
+        </details>
+        {importError && (
+          <p role="alert" className="text-caption text-rose-dark mt-4">
+            {importError}
+          </p>
+        )}
         {preview && (
           <div className="mt-5 rounded-xl border border-copper/30 bg-copper-50 p-4">
             <h3 className="font-serif text-title">Review before saving</h3>
@@ -488,6 +584,7 @@ export default function RecordsPage() {
                 <li key={w}>{w}</li>
               ))}
             </ul>
+            <ReferenceAudit record={preview} />
             {preview.observations.length > 0 && (
               <ObservationTable record={preview} />
             )}
@@ -511,7 +608,7 @@ export default function RecordsPage() {
               >
                 Save reviewed report
               </button>
-              <button className={actionClass} onClick={() => setPreview(null)}>
+              <button className={actionClass} onClick={discardImport}>
                 Discard preview
               </button>
             </div>
@@ -521,6 +618,7 @@ export default function RecordsPage() {
       <Card>
         <SectionTitle
           icon={FileText}
+          stackOnMobile
           title="Your record timeline"
           subtitle="Grouped by source calendar date; date-only entries are never assigned an invented time"
           action={
@@ -641,6 +739,7 @@ export default function RecordsPage() {
                     </p>
                   ))}
                 </div>
+                <ReferenceAudit record={r} />
                 {r.observations.length > 0 && <ObservationTable record={r} />}
               </details>
               <div className="flex flex-wrap gap-2 mt-4">
