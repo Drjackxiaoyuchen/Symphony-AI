@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { sourceUrl } from "./personal-ledgers";
 import { parseTimestamp } from "./tabular";
+import {
+  buildReferenceResolver,
+  referenceAuditSchema,
+} from "./fhir-references";
 
 export const RECORD_METHOD = "symphony-medical-records-v1";
 const text = z.string().trim().min(1).max(300);
@@ -77,6 +81,7 @@ export const medicalRecordSchema = z
     status: text,
     observations: z.array(recordObservationSchema).max(1000),
     warnings: z.array(z.string().max(2000)).max(100),
+    referenceAudit: referenceAuditSchema.optional(),
   })
   .superRefine((r, ctx) => {
     if (r.origin === "FHIR R4 subset" && !statuses.includes(r.status))
@@ -102,7 +107,7 @@ export const medicalRecordSchema = z
         message:
           "Imported reports require subject, report ID, file, hash and import time.",
       });
-    if (r.origin === "manual" && r.observations.length)
+    if (r.origin === "manual" && (r.observations.length || r.referenceAudit))
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message:
@@ -211,30 +216,12 @@ export function parseFhirReport(
     throw new Error(
       "This Bundle is paginated. Supply a complete single-report collection instead.",
     );
-  const index = new Map<string, Obj>(),
-    canonical = new Map<Obj, string>();
-  const resources = entries.map((e) => {
-    const entry = obj(e),
-      r = obj(entry.resource);
-    const aliases = [
-      str(entry.fullUrl),
-      r.id ? `${str(r.resourceType)}/${str(r.id)}` : "",
-    ].filter(Boolean);
-    for (const alias of new Set(aliases)) {
-      if (index.has(alias))
-        throw new Error(`Ambiguous duplicate resource identity: ${alias}`);
-      index.set(alias, r);
-    }
-    return r;
+  const bundleEntries = entries.map((e) => {
+    const entry = obj(e);
+    return { fullUrl: str(entry.fullUrl), resource: obj(entry.resource) };
   });
-  entries.forEach((e, i) => {
-    const entry = obj(e),
-      r = resources[i];
-    canonical.set(
-      r,
-      str(entry.fullUrl) || `${str(r.resourceType)}/${str(r.id)}`,
-    );
-  });
+  const resources = bundleEntries.map((e) => e.resource),
+    resolver = buildReferenceResolver(bundleEntries);
   const reports = resources.filter(
     (r) => r.resourceType === "DiagnosticReport",
   );
@@ -246,18 +233,15 @@ export function parseFhirReport(
   if (!str(report.id))
     throw new Error("The report needs a stable resource ID.");
   function subject(r: Obj) {
-    const ref = str(obj(r.subject).reference);
-    const patient = index.get(ref);
-    if (patient) {
-      if (patient.resourceType !== "Patient" || !patient.id)
-        throw new Error("Only a Patient subject is supported.");
-      return canonical.get(patient)!;
-    }
-    if (!/^Patient\/[A-Za-z0-9\-.]{1,64}$/.test(ref))
+    const resolved = resolver.resolve(r, r.subject, "Patient", "subject");
+    if (
+      typeof resolved.resource.id !== "string" ||
+      !/^[A-Za-z0-9.-]{1,64}$/.test(resolved.resource.id)
+    )
       throw new Error(
-        "Use an in-Bundle Patient reference or Patient/id; no remote identity resolution is performed.",
+        "The Patient needs a stable logical ID for this supported subset.",
       );
-    return ref;
+    return resolved.identity;
   }
   const patient = subject(report),
     seen = new Set<Obj>();
@@ -268,13 +252,14 @@ export function parseFhirReport(
   const warnings = [
     "Only the supported report/observation projection is saved. Keep the original JSON file; this is not a source-document vault or a full FHIR export.",
   ];
-  const observations = list(report.result).map((reference) => {
+  const observations = list(report.result).map((reference, i) => {
     const ref = str(obj(reference).reference),
-      r = index.get(ref);
-    if (!r || r.resourceType !== "Observation")
-      throw new Error(
-        `Unresolved Observation reference: ${ref || "missing"}. No network request was made.`,
-      );
+      r = resolver.resolve(
+        report,
+        reference,
+        "Observation",
+        `result[${i}]`,
+      ).resource;
     if (seen.has(r)) throw new Error("Duplicate Observation result reference.");
     seen.add(r);
     if (subject(r) !== patient)
@@ -322,7 +307,7 @@ export function parseFhirReport(
   if (
     resources
       .filter((r) => r.resourceType === "Patient")
-      .some((r) => canonical.get(r) !== patient)
+      .some((r) => resolver.identity(r) !== patient)
   )
     throw new Error(
       "Multiple Patient identities in the Bundle; split the export by person first.",
@@ -362,6 +347,7 @@ export function parseFhirReport(
     status: status(report.status),
     observations,
     warnings,
+    referenceAudit: resolver.audit(),
   });
 }
 
@@ -435,6 +421,8 @@ export function medicalRecordsCsvRows(records: MedicalRecord[]): unknown[][] {
       "notes",
       "source_url",
       "method",
+      "reference_resolution_method",
+      "reference_audit_json",
     ],
     ...records.map((r) => [
       r.id,
@@ -453,6 +441,8 @@ export function medicalRecordsCsvRows(records: MedicalRecord[]): unknown[][] {
       r.notes,
       r.sourceUrl,
       RECORD_METHOD,
+      r.referenceAudit?.method || "",
+      r.referenceAudit ? JSON.stringify(r.referenceAudit.links) : "",
     ]),
   ];
 }

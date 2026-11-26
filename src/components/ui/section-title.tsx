@@ -5,6 +5,7 @@ interface SectionTitleProps {
   title: string;
   subtitle?: string;
   action?: React.ReactNode;
+  stackOnMobile?: boolean;
 }
 
 export function SectionTitle({
@@ -12,10 +13,15 @@ export function SectionTitle({
   title,
   subtitle,
   action,
+  stackOnMobile = false,
 }: SectionTitleProps) {
   return (
-    <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
-      <div className="min-w-0 flex-1">
+    <div
+      className={`flex ${stackOnMobile ? "flex-col sm:flex-row" : "flex-wrap"} justify-between items-start gap-4 mb-6`}
+    >
+      <div
+        className={`min-w-0 flex-1 ${stackOnMobile ? "w-full sm:w-auto" : ""}`}
+      >
         <div className="flex items-center gap-2.5">
           {Icon && <Icon size={18} strokeWidth={1.5} className="text-copper" />}
           <h3 className="font-serif text-[17px] font-semibold text-stone-800">

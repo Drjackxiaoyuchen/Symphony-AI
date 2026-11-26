@@ -1,5 +1,5 @@
 // Reviewed public references. These are design/method references, not live integrations.
-export const RESEARCH_DATE = "2026-11-25";
+export const RESEARCH_DATE = "2026-11-26";
 export type ResearchSource = {
   id: string;
   title: string;
@@ -10,6 +10,29 @@ export type ResearchSource = {
   reviewedAt?: string; // Original sources: 2026-11-16; newer reviews override this.
 };
 export const RESEARCH_SOURCES: ResearchSource[] = [
+  {
+    id: "fhir-reference-resolution",
+    title: "FHIR R4 Bundle reference resolution",
+    kind: "Documentation",
+    url: "https://hl7.org/fhir/R4/bundle.html#references",
+    reviewedAt: "2026-11-26",
+    learning:
+      "Resolve relative type/id references against the referring resource's RESTful fullUrl base; require exact in-Bundle targets and consistent declared types.",
+    boundary:
+      "R4 4.0.1, CC0 specification; references.html and Bundle resolution rules reviewed. Our offline subset rejects unsupported references and never fetches external URLs. A resolved link does not authenticate patient identity or provide general FHIR conformance.",
+  },
+  {
+    id: "synthea-reference-output",
+    title: "Synthea source-linked synthetic FHIR output",
+    kind: "Repository",
+    url: "https://github.com/synthetichealth/synthea/tree/0857400eacbbecc5a67c7d05740efa227d22db39",
+    reviewedAt: "2026-11-26",
+    learning:
+      "Keep synthetic fixtures distinct from patient evidence and link generated resources through explicit fullUrl references.",
+    boundary:
+      "Pinned README, Apache-2.0 LICENSE and FhirR4.java reference construction reviewed. No code, generated patient corpus or model was copied or run. Our small fixtures and reference-case results are local contract validation, not a reproduction of Synthea or clinical realism.",
+  },
+
   {
     id: "fhir-provenance",
     title: "FHIR R4 Provenance: source and attribution boundaries",
@@ -543,8 +566,10 @@ export const SECTION_GUIDES: SectionGuide[] = [
       "Searchable timeline, linked observations, source hash, metadata CSV and reviewed JSON backups",
     current:
       "Working source register plus reviewed record-to-person attribution previews, fingerprint change gates and separate person exports. Legacy records stay unassigned; every attributed record is withheld from the default report, including stale links. Attribution does not authenticate identity.",
-    next: "Evaluate multi-person source-store isolation and explicit source identity/namespace mappings before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.",
+    next: "Namespace-aware in-Bundle resolution and a saved link audit are implemented. Next isolate source stores by person and define cross-import identifier namespaces before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.",
     sources: [
+      "fhir-reference-resolution",
+      "synthea-reference-output",
       "fhir-report",
       "fhir-provenance",
       "medplum-match",
