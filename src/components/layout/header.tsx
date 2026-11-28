@@ -5,9 +5,10 @@ import { Upload, BookOpen } from "lucide-react";
 import { sectionGuide } from "@/data/research";
 export default function Header() {
   const pathname = usePathname() || "/dashboard";
-  const guide = sectionGuide(pathname);
+  const personNotebooks = pathname === "/records/people";
+  const guide = sectionGuide(personNotebooks ? "/records" : pathname);
   const title =
-    guide?.title ||
+    (personNotebooks ? "Person notebooks" : guide?.title) ||
     (pathname === "/reports"
       ? "Reports & Export"
       : pathname === "/research"

@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { Users, BookOpen, Download, Plus, GitBranch } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { SectionTitle } from "@/components/ui/section-title";
@@ -200,9 +201,13 @@ export default function FamilyPage() {
           </a>
         </div>
         <p className="text-caption text-stone-500 mt-4">
-          Family Hub profiles own only the histories entered here. Existing
-          glucose, lab, genome, medical and medication records remain in their
-          original personal workspace; none are assigned or copied to relatives.
+          Profiles own the histories entered here. Existing personal imports
+          stay in their original stores. New medical sources can be explicitly
+          reviewed in{" "}
+          <Link href="/records/people" className="underline text-copper-700">
+            separate person notebooks
+          </Link>
+          ; nothing is migrated automatically.
         </p>
       </Card>
       <div

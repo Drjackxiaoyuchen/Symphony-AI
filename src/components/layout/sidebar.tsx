@@ -101,16 +101,23 @@ export default function Sidebar() {
             <Link
               key={item.path}
               href={item.path}
-              aria-current={pathname === item.path ? "page" : undefined}
+              aria-current={
+                pathname === item.path || pathname.startsWith(`${item.path}/`)
+                  ? "page"
+                  : undefined
+              }
               className={cn(
                 "flex items-center justify-between rounded-xl px-3 py-2 text-caption border border-transparent",
-                pathname === item.path
+                pathname === item.path || pathname.startsWith(`${item.path}/`)
                   ? "bg-white text-copper-700 !border-cream-300 font-medium"
                   : "text-stone-500 hover:bg-cream-200",
               )}
             >
               <span>{item.title}</span>
-              {pathname === item.path && <ArrowUpRight size={13} />}
+              {(pathname === item.path ||
+                pathname.startsWith(`${item.path}/`)) && (
+                <ArrowUpRight size={13} />
+              )}
             </Link>
           ))}
           {query &&
