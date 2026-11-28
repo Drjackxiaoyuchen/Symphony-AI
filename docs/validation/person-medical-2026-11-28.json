@@ -1,0 +1,204 @@
+{
+  "date": "2026-11-28",
+  "product": "Symphony AI",
+  "method": "symphony-person-medical-v1",
+  "syntheticOnly": true,
+  "automated": {
+    "tests": {
+      "passed": 134,
+      "failed": 0,
+      "newCases": 10
+    },
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "researchDocs": "generated"
+  },
+  "browser": {
+    "engine": "ChatGPT in-app browser",
+    "target": "Local production build on disposable loopback origin",
+    "viewports": [
+      {
+        "width": 1280,
+        "height": 900
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "checks": [
+      {
+        "name": "Empty notebook workspace does not seed or select profiles",
+        "passed": true
+      },
+      {
+        "name": "Sources and exports held until explicit owner review",
+        "passed": true
+      },
+      {
+        "name": "FHIR preview preserves zero, comparator and absence and requires acknowledgement",
+        "passed": true
+      },
+      {
+        "name": "Downloaded notebook preserves selected owner, independent hash, zero, inequality, missing result and seven links",
+        "passed": true
+      },
+      {
+        "name": "Switching profiles shows a separate empty unreviewed store",
+        "passed": true
+      },
+      {
+        "name": "Wrong-owner backup is rejected before replacement",
+        "passed": true
+      },
+      {
+        "name": "Second owner exports only its independent Patient source",
+        "passed": true
+      },
+      {
+        "name": "Different Patient source held within one notebook",
+        "passed": true
+      },
+      {
+        "name": "Exact duplicate report is rejected",
+        "passed": true
+      },
+      {
+        "name": "New same-Patient report can be previewed",
+        "passed": true
+      },
+      {
+        "name": "Editing source text invalidates its preview",
+        "passed": true
+      },
+      {
+        "name": "Removal affects only selected notebook and offers undo",
+        "passed": true
+      },
+      {
+        "name": "Same-owner backup requires explicit replacement acknowledgement",
+        "passed": true
+      },
+      {
+        "name": "Editing backup text invalidates restoration preview",
+        "passed": true
+      },
+      {
+        "name": "Reviewed restore round-trips complete source projections",
+        "passed": true
+      },
+      {
+        "name": "Other person's notebook is unchanged after remove, undo and restore",
+        "passed": true
+      },
+      {
+        "name": "Identity-field edit holds ordinary export and new sources",
+        "passed": true
+      },
+      {
+        "name": "Old reviewed identity backup held after profile change",
+        "passed": true
+      },
+      {
+        "name": "Explicit renewal preserves sources and updates only reviewed identity context",
+        "passed": true
+      },
+      {
+        "name": "Final build validates a supported source before preview",
+        "passed": true
+      },
+      {
+        "name": "Final backup error appears beside restore controls",
+        "passed": true
+      },
+      {
+        "name": "Legacy source register remains empty after person imports",
+        "passed": true
+      },
+      {
+        "name": "Default personal report excludes person-notebook identifiers and source measurements",
+        "passed": true
+      },
+      {
+        "name": "Desktop notebook page stays within viewport",
+        "passed": true
+      },
+      {
+        "name": "Mobile page is contained and identity status fits on one line",
+        "passed": true,
+        "observed": {
+          "documentWidth": 385,
+          "statusHeight": 25.59375,
+          "statusLineHeight": "25.6px",
+          "statusScrollWidth": 70,
+          "statusWidth": 69.6640625,
+          "viewport": 390
+        }
+      },
+      {
+        "name": "Mobile owner selection and export retain only the selected source",
+        "passed": true
+      },
+      {
+        "name": "Mobile observation and audit tables scroll within named keyboard-focusable regions",
+        "passed": true,
+        "observed": {
+          "documentWidth": 385,
+          "regions": [
+            {
+              "name": "Synthetic chemistry panel observations",
+              "scrollWidth": 650,
+              "tabIndex": 0,
+              "width": 303
+            },
+            {
+              "name": "Reference audit table",
+              "scrollWidth": 720,
+              "tabIndex": 0,
+              "width": 269
+            }
+          ],
+          "viewport": 390
+        }
+      },
+      {
+        "name": "Final desktop build keeps owner and export controls contained",
+        "passed": true
+      },
+      {
+        "name": "Final browser session reports no application console errors",
+        "passed": true,
+        "observed": {
+          "count": 0
+        }
+      },
+      {
+        "name": "Final namespace-gate build still previews supported source with captured audit",
+        "passed": true
+      },
+      {
+        "name": "Final namespace-gate build rejects malformed Patient URI before backup preview",
+        "passed": true
+      },
+      {
+        "name": "Final namespace-gate build restores and exports exact supported notebook",
+        "passed": true
+      }
+    ],
+    "scope": "Representative single-browser flows; not a cross-browser, real-patient, simultaneous cross-tab or quota benchmark.",
+    "screenshots": [
+      "../screenshots/symphony-person-medical-2026-11-28.jpg",
+      "../screenshots/symphony-person-medical-source-2026-11-28.jpg",
+      "../screenshots/symphony-person-medical-mobile-2026-11-28.jpg",
+      "../screenshots/symphony-person-medical-audit-mobile-2026-11-28.jpg"
+    ],
+    "finalSmoke": "Supported source preview, malformed Patient URI rejection, and exact reviewed restore/export rechecked after final backup URI/audit gate tightening."
+  },
+  "visualAcceptance": "Pending explicit user feedback",
+  "limits": [
+    "Unencrypted local dataset scopes, not access control or patient matching",
+    "One exact absolute FHIR Patient identity per notebook; cross-import aliases and reviewed legacy transfer are pending",
+    "Stale-view guards do not provide atomic cross-tab transactions",
+    "No user medical or genome data, model inference or paid services used"
+  ]
+}

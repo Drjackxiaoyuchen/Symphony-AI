@@ -43,3 +43,5 @@ Use copper for interactive emphasis and continuous audit scales. Muted sage/rose
 Next: collect visual feedback and continue the same scheme in person-scoped source-store work. Keep scientific validation independent from visual acceptance.
 
 2026-11-26: The reference audit extends the same typography, neutral source context, copper disclosures and review controls. Long target URIs wrap in a named, keyboard-focusable table with bounded internal scrolling. Pasted FHIR input follows the existing backup-preview pattern. Desktop/mobile screenshots are proposals; user visual acceptance remains pending.
+
+2026-11-28: Separate person medical notebooks use the same cards, fields, copper controls and serif hierarchy. Owner selection is explicit, the owner/export header stacks on mobile, and compact counters retain three columns. Source values and link audits reuse the existing components. Desktop/mobile previews are for user review; visual acceptance remains pending.

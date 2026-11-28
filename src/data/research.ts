@@ -1,5 +1,5 @@
 // Reviewed public references. These are design/method references, not live integrations.
-export const RESEARCH_DATE = "2026-11-26";
+export const RESEARCH_DATE = "2026-11-28";
 export type ResearchSource = {
   id: string;
   title: string;
@@ -10,6 +10,28 @@ export type ResearchSource = {
   reviewedAt?: string; // Original sources: 2026-11-16; newer reviews override this.
 };
 export const RESEARCH_SOURCES: ResearchSource[] = [
+  {
+    id: "fhir-patient-compartments",
+    title: "FHIR R4 patient-associated resource compartments",
+    kind: "Documentation",
+    url: "https://hl7.org/fhir/R4/compartmentdefinition.html",
+    reviewedAt: "2026-11-28",
+    learning:
+      "Make the selected patient-associated scope explicit before source reads, validation and export.",
+    boundary:
+      "R4 4.0.1 scope and membership inspected; CC0 specification, terminology terms separate. Our local notebooks do not implement FHIR compartments, Patient.link or access control. No specification text or terminology copied.",
+  },
+  {
+    id: "medplum-scoped-repository",
+    title: "Medplum explicit repository scopes",
+    kind: "Repository",
+    url: "https://github.com/medplum/medplum/blob/1f2c185cb97e93b4f1decbf19a19ea41ab39e8d0/packages/server/src/fhir/accesspolicy.ts",
+    reviewedAt: "2026-11-28",
+    learning:
+      "Pass an explicit scope to data operations rather than assume that a global repository is scoped.",
+    boundary:
+      "Pinned getRepoForProject/getRepoForProjects/buildAccessPolicy and Apache-2.0 LICENSE.txt inspected. No Medplum code/service copied, run or benchmarked. Owner-keyed localStorage separates datasets but does not reproduce server authorization.",
+  },
   {
     id: "fhir-reference-resolution",
     title: "FHIR R4 Bundle reference resolution",
@@ -565,9 +587,11 @@ export const SECTION_GUIDES: SectionGuide[] = [
     output:
       "Searchable timeline, linked observations, source hash, metadata CSV and reviewed JSON backups",
     current:
-      "Working source register plus reviewed record-to-person attribution previews, fingerprint change gates and separate person exports. Legacy records stay unassigned; every attributed record is withheld from the default report, including stale links. Attribution does not authenticate identity.",
-    next: "Namespace-aware in-Bundle resolution and a saved link audit are implemented. Next isolate source stores by person and define cross-import identifier namespaces before broader FHIR imports. User-attributed records have separate person exports; no automated patient matching is installed.",
+      "Source register with reviewed attribution, plus separate person notebooks at /records/people with owner-bound FHIR imports, identity-change holds and reviewed JSON replacement. Existing records are preserved; notebooks stay out of the default personal report. Profiles do not authenticate clinical identity.",
+    next: "Next add explicitly reviewed legacy-source transfer/copy and cross-import namespace/alias handling. Separate notebooks accept one exact absolute Patient identity each; no automated patient matching is installed.",
     sources: [
+      "fhir-patient-compartments",
+      "medplum-scoped-repository",
       "fhir-reference-resolution",
       "synthea-reference-output",
       "fhir-report",
